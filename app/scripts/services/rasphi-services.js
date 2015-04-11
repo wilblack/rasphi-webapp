@@ -3,7 +3,7 @@ var service = angular.module('rasphi.services', []).
 
 // This example is taken from https://github.com/totaljs/examples/tree/master/angularjs-websocket
 service.service('$user', function( $localStorage){
-    obj = this;
+    var obj = this;
 
     this.object = {
         username:null,
