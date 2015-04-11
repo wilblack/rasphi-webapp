@@ -1,0 +1,28 @@
+$primary: #408E2F;
+$primary-light: #9AD58E;
+$primary-dark: #0C4700;
+
+$secondary: #256F5C;
+$secondary-light: #6FA698;
+$secondary-dark: #003729;
+
+$tertiary: #7B9F35;
+$tertiary-light: #D4EE9F;
+$tertiary-dark: #354F00;
+
+.large-stat {
+    font-size: 2em;
+    color: $tertiary;
+}
+
+.bot-panel {
+
+    .panel-heading {
+        background-color: $tertiary-light;
+    }
+
+    .panel-body {
+        
+
+    }
+}

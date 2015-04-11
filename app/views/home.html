@@ -1,0 +1,59 @@
+<ng-include src="'views/partials/header.html'"></ng-include>
+
+    <!-- Showboxes for each growbot -->
+    <div class="row">
+        <div class="col col-sm-3">
+            <ng-include src="'views/partials/sidebar.html'"></ng-include>
+        </div>
+
+    <div class="col col-sm-9">
+        <div class="row">
+            <div class="col col-sm-12">
+                <div class="panel panel-default bot-panel">
+                    <div class="panel-heading">
+                        {{current.botName}}
+                        
+                    </div>
+                    <div class="panel-body">
+                        <div>
+                        temp <span class="large-stat" ng-show="units.temp === 'c'">{{current.temp | number: 1}} &deg;C</span>
+                        <span class="large-stat" ng-show="units.temp === 'f'">{{celsius2fahrenheit(current.temp) | number: 1}} &degF</span>
+
+                        humid <span class="item item-text-wrap large-stat">
+                            {{current.humidity | number: 1}}% 
+                        </span>
+
+                        <span ng-show="current.pir">light <span class="item item-text-wrap large-stat">
+                            {{current.pir | number: 1}} </span>
+                        </span>
+                        </div>
+                        </div>
+                            Last updated {{current.timestamp}}
+                            <button class="btn btn-default btn-small" ng-click='refreshSensorValues()'><span class="glyphicon glyphicon-refresh"></span></button>
+                            
+                        </div>
+                        <ng-include src="'views/partials/bot-graphs.html'"></ng-include>
+
+                    </div><!-- end panel-body -->
+                </div><!-- end panel -->
+
+            </div>
+
+            
+
+        </div>
+    </div>
+
+
+
+    
+
+
+    <div class="row" class="padding"> 
+      <small>Last updated: {{current.timestamp | date:'short'}}</small>
+      
+    </div>
+
+  </div>
+</ion-view>
+

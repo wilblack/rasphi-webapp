@@ -1,0 +1,38 @@
+    <h4>Temperature</h4>
+    <nvd3-line-chart
+      data="graphs.temp"
+      showXAxis="true"
+      showYAxis="true"
+      height="250"
+      xAxisTickFormat="xAxisTickFormatFunction()"
+      forcey="[0, 35]"
+      tooltips="true"
+      objectequality="true"
+      interactive="true">
+    </nvd3-line-chart>
+
+    <h4>Humidity</h4>
+    <nvd3-line-chart
+      data="graphs.humidity"
+      showXAxis="true"
+      showYAxis="true"
+      height="250"
+      xAxisTickFormat="xAxisTickFormatFunction()"
+      forcey="[0, 100]"
+      tooltips="true"
+      objectequality="true"
+      interactive="true">
+    </nvd3-line-chart>
+
+    <h4>Light</h4>
+    <nvd3-line-chart
+      data="graphs.light"
+      showXAxis="true"
+      showYAxis="true"
+      height="250"
+      xAxisTickFormat="xAxisTickFormatFunction()"
+      yDomain="[0, 100]"
+      tooltips="true"
+      objectequality="true"
+      interactive="true">
+    </nvd3-line-chart>
