@@ -26,7 +26,7 @@ angular
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
-          'maxHistory': 500,
+          'maxHistory': 5,
           'updateDt':10,
           'botName': 'growbot.solalla.ardyh'
       }
@@ -51,8 +51,8 @@ angular
       });
   });
 
-angular.module('rasphiWebappApp')
-.controller('HomeCtrl', function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+var app = angular.module("rasphiWebappApp");
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
@@ -64,40 +64,20 @@ angular.module('rasphiWebappApp')
     $scope.refreshSensorValues = function(){
         console.log("[refreshSensorValues()]");
         $ardyh.sendCommand('read_sensors');
-    }
+    };
     
 
-    $scope.graphs = {
-        'temp':[{
-            'key':'Temp (C)',
-            'values': []
-        }],
-        'humidity':[{
-            'key':'Humidity',
-            'values': []
-        }],
-        'light':[{
-            'key':'Light',
-            'values': []
-        }]
-    };
     var settings = $localStorage.getObject('settings');
     
     if (typeof(settings.maxHistory) === 'undefined'){
         $localStorage.setObject('settings', ardyhConf.settings);
-    };
-
-    $sensorValues.load(function(){
-        $scope.refreshSensorValues();
-        $scope.graphs = $sensorValues.graphs;
-        
-    });
+    }
 
     $scope.xAxisTickFormatFunction = function(){
         return function(d){
-            return new Date(d).toString("hh:mm tt")
-        }
-    }
+            return new Date(d).toString("MM-dd hh:mm tt");
+        };
+    };
 
     $scope.toggleUnits = function(sensor) {
         if (sensor === 'temp') {
@@ -118,20 +98,20 @@ angular.module('rasphiWebappApp')
             $scope.current.humidity = data.message.kwargs.humidity;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
 
-        })
+        });
         
     });
 
-    $rootScope.$on('graphs-updated', function(event, data){
-        $scope.graphs = $sensorValues.graphs;
-    });
+    // $rootScope.$on('graphs-updated', function(event, data){
+    //     $scope.graphs = $sensorValues.graphs;
+    // });
 
-    $rootScope.$on('ardyh-connect-open', function(event, data){
-        $scope.refreshSensorValues();
-    })
+    // $rootScope.$on('ardyh-connect-open', function(event, data){
+    //     $scope.refreshSensorValues();
+    // })
 
     
-})
+});
 angular.module('rasphiWebappApp')
 .controller('SettingsCtrl', function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user, $ionicLoading) {
 
@@ -238,32 +218,32 @@ service.
               var bot_name = data.bot_name;
               command = data.message.command; 
             } catch (e) {
-                console.log("[onmessage] Could not find bot_name or command in message")
-                console.log(data)
-                return
+                console.log("[onmessage] Could not find bot_name or command in message");
+                console.log(data);
+                return;
             }
             
             if (command === 'sensor_values') {
-               console.log("broadcasting new-sensor-values")
+               console.log("broadcasting new-sensor-values");
 
                $rootScope.$broadcast('new-sensor-values', data);
             }
-        }
+        };
 
 
         obj.socket.onclose = function(){
             //alert("connection closed....");
             console.log("The connection has been closed. Attempting to reconnect.");
             //obj.init(obj.botName);
-        }
+        };
 
         obj.socket.onerror = function(){
             //alert("connection closed....");
             this._log("The was an error.");
             this.showReadyState("error");
-        }
+        };
 
-    }
+    };
 
     this.send = function(messageObj) {
         if (obj.socket.readyState === 1){
@@ -289,7 +269,7 @@ service.
 
 }])
 
-.service('$sensorValues', ['$rootScope', '$localStorage', function($rootScope, $localStorage) {
+.service('$sensorValues', ['$rootScope', '$localStorage', '$q', '$http', 'ardyhConf', function($rootScope, $localStorage, $q, $http, ardyhConf) {
     var obj = this;
     this.objects = [];
     this.initGraphs = {
@@ -308,9 +288,15 @@ service.
     };
     this.graphs = this.initGraphs;
 
-    this.updateGraph = function(entity){
+    this.updateGraphs = function(entity){
+        /*
+            
+            entity
+            - 
+        */
+
         try {
-            var values = entity.message.kwargs
+            var values = entity.data;
         } catch(e) {
             console.log("Could not find sensor values.")
             console.log(e);
@@ -338,6 +324,33 @@ service.
         
     }
 
+    this.fetch = function() {
+        /*
+            Returns a promoise
+        */ 
+
+        var defer = $q.defer();
+        var botName = "rpi2.solalla.ardyh";
+        var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
+        var data = {
+            "limit":500,
+        };
+
+
+        $http.get(resource)
+            .success(function(data, status){
+                _.each(data, function(entity){
+                    obj.updateGraphs(entity);
+                });
+                defer.resolve(obj.graphs, status);
+            })
+            .error(function(data, status){
+                defer.reject(data, status);
+            });
+        return defer.promise;
+
+    };
+
     this.load = function(onLoad){
         if (obj.objects.length > 0){
             onLoad();
@@ -350,11 +363,11 @@ service.
     };
 
 
-    $rootScope.$on('new-sensor-values', function(event, data){
-        $rootScope.$apply(function(){
-            obj.updateGraph(data);
-        });
-    });
+    // $rootScope.$on('new-sensor-values', function(event, data){
+    //     $rootScope.$apply(function(){
+    //         obj.updateGraphs(data);
+    //     });
+    // });
 
     $rootScope.$on('max-history-update', function(event, data){
         obj.objects = [];
@@ -377,6 +390,7 @@ service.
     }
   }
 }]);
+"use strict";
 var service = angular.module('rasphi.services', []).
   value('version', '0.1');
 
@@ -387,7 +401,7 @@ service.service('$user', function( $localStorage){
     this.object = {
         username:null,
         token:null,
-        profile:null,
+        profile:null
     };
 
     this.login = function(username, password, stayLoggedIn, callback){
@@ -395,10 +409,46 @@ service.service('$user', function( $localStorage){
             var resp = {};
             callback(error, resp);
 
-    }
+    };
 
     this.load = function(callback){
         obj.object = $localStorage.getObject('user');
         callback(obj.object);
-    }
-})
+    };
+});
+'user strict';
+
+angular.module('rasphiWebappApp')
+.directive('botGraphs', function($sensorValues){
+    return{
+        scope:true,
+        templateUrl: 'views/partials/bot-graphs.html',
+        restrict: 'EA',
+        link: function(scope, elem, attrs){
+
+            scope.graphs = {
+                'temp':[{
+                    'key':'Temp (C)',
+                    'values': []
+                }],
+                'humidity':[{
+                    'key':'Humidity',
+                    'values': []
+                }],
+                'light':[{
+                    'key':'Light',
+                    'values': []
+                }]
+            };
+
+            //Grab archived data
+            $sensorValues.fetch()
+            .then(function(data, status){
+                console.log("successly fetch sensorValues");
+                scope.graphs = $sensorValues.graphs;
+            },function(data, status) {
+                console.log("failed to fetch sensorValues");
+            });
+        }   
+    };
+});
