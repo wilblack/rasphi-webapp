@@ -26,7 +26,7 @@ angular
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
-          'maxHistory': 500,
+          'maxHistory': 5,
           'updateDt':10,
           'botName': 'growbot.solalla.ardyh'
       }

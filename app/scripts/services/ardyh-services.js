@@ -100,32 +100,32 @@ service.
               var bot_name = data.bot_name;
               command = data.message.command; 
             } catch (e) {
-                console.log("[onmessage] Could not find bot_name or command in message")
-                console.log(data)
-                return
+                console.log("[onmessage] Could not find bot_name or command in message");
+                console.log(data);
+                return;
             }
             
             if (command === 'sensor_values') {
-               console.log("broadcasting new-sensor-values")
+               console.log("broadcasting new-sensor-values");
 
                $rootScope.$broadcast('new-sensor-values', data);
             }
-        }
+        };
 
 
         obj.socket.onclose = function(){
             //alert("connection closed....");
             console.log("The connection has been closed. Attempting to reconnect.");
             //obj.init(obj.botName);
-        }
+        };
 
         obj.socket.onerror = function(){
             //alert("connection closed....");
             this._log("The was an error.");
             this.showReadyState("error");
-        }
+        };
 
-    }
+    };
 
     this.send = function(messageObj) {
         if (obj.socket.readyState === 1){
@@ -151,7 +151,7 @@ service.
 
 }])
 
-.service('$sensorValues', ['$rootScope', '$localStorage', function($rootScope, $localStorage) {
+.service('$sensorValues', ['$rootScope', '$localStorage', '$q', '$http', 'ardyhConf', function($rootScope, $localStorage, $q, $http, ardyhConf) {
     var obj = this;
     this.objects = [];
     this.initGraphs = {
@@ -170,9 +170,15 @@ service.
     };
     this.graphs = this.initGraphs;
 
-    this.updateGraph = function(entity){
+    this.updateGraphs = function(entity){
+        /*
+            
+            entity
+            - 
+        */
+
         try {
-            var values = entity.message.kwargs
+            var values = entity.data;
         } catch(e) {
             console.log("Could not find sensor values.")
             console.log(e);
@@ -200,6 +206,33 @@ service.
         
     }
 
+    this.fetch = function() {
+        /*
+            Returns a promoise
+        */ 
+
+        var defer = $q.defer();
+        var botName = "rpi2.solalla.ardyh";
+        var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
+        var data = {
+            "limit":500,
+        };
+
+
+        $http.get(resource)
+            .success(function(data, status){
+                _.each(data, function(entity){
+                    obj.updateGraphs(entity);
+                });
+                defer.resolve(obj.graphs, status);
+            })
+            .error(function(data, status){
+                defer.reject(data, status);
+            });
+        return defer.promise;
+
+    };
+
     this.load = function(onLoad){
         if (obj.objects.length > 0){
             onLoad();
@@ -212,11 +245,11 @@ service.
     };
 
 
-    $rootScope.$on('new-sensor-values', function(event, data){
-        $rootScope.$apply(function(){
-            obj.updateGraph(data);
-        });
-    });
+    // $rootScope.$on('new-sensor-values', function(event, data){
+    //     $rootScope.$apply(function(){
+    //         obj.updateGraphs(data);
+    //     });
+    // });
 
     $rootScope.$on('max-history-update', function(event, data){
         obj.objects = [];

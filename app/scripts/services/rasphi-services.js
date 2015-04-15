@@ -1,3 +1,4 @@
+"use strict";
 var service = angular.module('rasphi.services', []).
   value('version', '0.1');
 
@@ -8,7 +9,7 @@ service.service('$user', function( $localStorage){
     this.object = {
         username:null,
         token:null,
-        profile:null,
+        profile:null
     };
 
     this.login = function(username, password, stayLoggedIn, callback){
@@ -16,10 +17,10 @@ service.service('$user', function( $localStorage){
             var resp = {};
             callback(error, resp);
 
-    }
+    };
 
     this.load = function(callback){
         obj.object = $localStorage.getObject('user');
         callback(obj.object);
-    }
-})
+    };
+});

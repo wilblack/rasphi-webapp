@@ -1,5 +1,5 @@
-angular.module('rasphiWebappApp')
-.controller('HomeCtrl', function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+var app = angular.module("rasphiWebappApp");
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
@@ -11,40 +11,20 @@ angular.module('rasphiWebappApp')
     $scope.refreshSensorValues = function(){
         console.log("[refreshSensorValues()]");
         $ardyh.sendCommand('read_sensors');
-    }
+    };
     
 
-    $scope.graphs = {
-        'temp':[{
-            'key':'Temp (C)',
-            'values': []
-        }],
-        'humidity':[{
-            'key':'Humidity',
-            'values': []
-        }],
-        'light':[{
-            'key':'Light',
-            'values': []
-        }]
-    };
     var settings = $localStorage.getObject('settings');
     
     if (typeof(settings.maxHistory) === 'undefined'){
         $localStorage.setObject('settings', ardyhConf.settings);
-    };
-
-    $sensorValues.load(function(){
-        $scope.refreshSensorValues();
-        $scope.graphs = $sensorValues.graphs;
-        
-    });
+    }
 
     $scope.xAxisTickFormatFunction = function(){
         return function(d){
-            return new Date(d).toString("hh:mm tt")
-        }
-    }
+            return new Date(d).toString("MM-dd hh:mm tt");
+        };
+    };
 
     $scope.toggleUnits = function(sensor) {
         if (sensor === 'temp') {
@@ -65,17 +45,17 @@ angular.module('rasphiWebappApp')
             $scope.current.humidity = data.message.kwargs.humidity;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
 
-        })
+        });
         
     });
 
-    $rootScope.$on('graphs-updated', function(event, data){
-        $scope.graphs = $sensorValues.graphs;
-    });
+    // $rootScope.$on('graphs-updated', function(event, data){
+    //     $scope.graphs = $sensorValues.graphs;
+    // });
 
-    $rootScope.$on('ardyh-connect-open', function(event, data){
-        $scope.refreshSensorValues();
-    })
+    // $rootScope.$on('ardyh-connect-open', function(event, data){
+    //     $scope.refreshSensorValues();
+    // })
 
     
-})
+});
