@@ -23,7 +23,7 @@ angular
 
 
   .constant('ardyhConf', {
-      'version':'0.04.21',
+      'version':'0.04.22',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -55,6 +55,7 @@ angular
 var app = angular.module("rasphiWebappApp");
 app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
+    $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
 
