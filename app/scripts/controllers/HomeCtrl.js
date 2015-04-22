@@ -1,6 +1,7 @@
 var app = angular.module("rasphiWebappApp");
 app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
+    $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
 
