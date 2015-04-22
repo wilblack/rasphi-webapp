@@ -43,8 +43,11 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
         $scope.$apply(function(){ // Needed this because the $braodcast is on he $rootScope
             $scope.current.temp = data.message.kwargs.temp;
             $scope.current.humidity = data.message.kwargs.humidity;
+            $scope.current.light = data.message.kwargs.light;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
-
+            
+            //$sensorValues.fetch()
+            
         });
         
     });
@@ -53,9 +56,9 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     //     $scope.graphs = $sensorValues.graphs;
     // });
 
-    // $rootScope.$on('ardyh-connect-open', function(event, data){
-    //     $scope.refreshSensorValues();
-    // })
+    $rootScope.$on('ardyh-connection-open', function(event, data){
+        $scope.refreshSensorValues();
+    })
 
     
 });

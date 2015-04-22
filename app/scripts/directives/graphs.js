@@ -31,6 +31,12 @@ angular.module('rasphiWebappApp')
             },function(data, status) {
                 console.log("failed to fetch sensorValues");
             });
+
+            scope.tempColor = function(){
+                return function(d, i) {
+                    return '#E01B5D'
+                }
+            }
         }   
     };
 });
