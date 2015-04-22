@@ -27,7 +27,7 @@ angular
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
-          'maxHistory': 1200,
+          'maxHistory': 1500,
           'updateDt':10,
           'botName': 'growbot.solalla.ardyh'
       }
@@ -97,8 +97,11 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
         $scope.$apply(function(){ // Needed this because the $braodcast is on he $rootScope
             $scope.current.temp = data.message.kwargs.temp;
             $scope.current.humidity = data.message.kwargs.humidity;
+            $scope.current.light = data.message.kwargs.light;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
-
+            
+            //$sensorValues.fetch()
+            
         });
         
     });
@@ -107,9 +110,9 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     //     $scope.graphs = $sensorValues.graphs;
     // });
 
-    // $rootScope.$on('ardyh-connect-open', function(event, data){
-    //     $scope.refreshSensorValues();
-    // })
+    $rootScope.$on('ardyh-connection-open', function(event, data){
+        $scope.refreshSensorValues();
+    })
 
     
 });
@@ -303,7 +306,8 @@ service.
             console.log(e);
             return;
         }
-        var maxHistory = $localStorage.getObject('settings').maxHistory;
+        // var maxHistory = $localStorage.getObject('settings').maxHistory;
+        var maxHistory = ardyhConf.maxHistory;
         var timestamp = new Date(entity.timestamp);
         var light = values.light
         if (typeof(light) === 'number' && light > 10000) light = null;
@@ -311,6 +315,7 @@ service.
         obj.graphs.temp[0].values.push([timestamp.valueOf(), values.temp]);
         obj.graphs.humidity[0].values.push([timestamp.valueOf(), values.humidity]);
         obj.graphs.light[0].values.push([timestamp.valueOf(), light]);
+
 
         if (obj.graphs.temp[0].values.length > maxHistory){
              obj.graphs.temp[0].values.shift();
@@ -328,7 +333,7 @@ service.
         /*
             Returns a promoise
         */ 
-
+        obj.graphs = obj.initGraphs;
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
         var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
@@ -447,6 +452,12 @@ angular.module('rasphiWebappApp')
             },function(data, status) {
                 console.log("failed to fetch sensorValues");
             });
+
+            scope.tempColor = function(){
+                return function(d, i) {
+                    return '#E01B5D'
+                }
+            }
         }   
     };
 });
