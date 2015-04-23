@@ -75,11 +75,6 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
         $localStorage.setObject('settings', ardyhConf.settings);
     }
 
-    $scope.xAxisTickFormatFunction = function(){
-        return function(d){
-            return new Date(d).toString("MM-dd hh:mm tt");
-        };
-    };
 
     $scope.toggleUnits = function(sensor) {
         if (sensor === 'temp') {
@@ -101,7 +96,11 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
             $scope.current.light = data.message.kwargs.light;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
             
-            //$sensorValues.fetch()
+            var entity = {
+                timestamp: data.message.kwargs.timestamp,
+                data: $scope.current
+            };
+            $sensorValues.updateGraphs(entity)
             
         });
         
@@ -279,7 +278,7 @@ service.
     this.objects = [];
     this.initGraphs = {
         'temp':[{
-            'key':'Temp (C)',
+            'key':'Temp (F)',
             'values': []
         }],
         'humidity':[{
@@ -297,7 +296,11 @@ service.
         /*
             
             entity
-            - 
+            - timestamp
+            - data
+              - light
+              - temp
+              - humidity
         */
 
         try {
@@ -310,10 +313,13 @@ service.
         // var maxHistory = $localStorage.getObject('settings').maxHistory;
         var maxHistory = ardyhConf.maxHistory;
         var timestamp = new Date(entity.timestamp);
+
         var light = values.light
+        var temp = values.temp
+        if (typeof(temp) === 'number') temp = temp * (9/5) + 32;
         if (typeof(light) === 'number' && light > 10000) light = null;
 
-        obj.graphs.temp[0].values.push([timestamp.valueOf(), values.temp]);
+        obj.graphs.temp[0].values.push([timestamp.valueOf(), temp]);
         obj.graphs.humidity[0].values.push([timestamp.valueOf(), values.humidity]);
         obj.graphs.light[0].values.push([timestamp.valueOf(), light]);
 
@@ -455,10 +461,20 @@ angular.module('rasphiWebappApp')
             });
 
             scope.tempColor = function(){
+                
+
                 return function(d, i) {
-                    return '#E01B5D'
+                    var color = "#408E2F";
+                    return color;
                 }
-            }
+            };
+
+
+            scope.xAxisTickFormatFunction = function(){
+                return function(d){
+                    return new Date(d).toString("ddd hh:mmt");
+                };
+            };
         }   
     };
 });
