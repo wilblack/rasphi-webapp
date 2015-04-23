@@ -44,7 +44,7 @@ angular.module('rasphiWebappApp')
 
             scope.xAxisTickFormatFunction = function(){
                 return function(d){
-                    return new Date(d).toString("MM-dd hh:mm tt");
+                    return new Date(d).toString("ddd hh:mmt");
                 };
             };
         }   

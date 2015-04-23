@@ -1,22 +1,22 @@
     <nvd3-line-chart
       data="graphs.temp"
-      showXAxis="false"
+      showXAxis="true"
       showYAxis="true"
       height="150"
       yAxisLabel="temp (F)"
       xAxisTickFormat="xAxisTickFormatFunction()"
-      forcey="[15, 25]"
+      forcey="[60, 100]"
       tooltips="true"
       objectequality="true"
       color="tempColor()"
       api="tempApi"
-      margin = "{left:75,top:10,bottom:0,right:0}"
+      margin = "{left:75,top:10,bottom:0,right:30}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>
 
     <nvd3-line-chart
       data="graphs.humidity"
-      showXAxis="false"
+      showXAxis="true"
       showYAxis="true"
       height="150"
       yAxisLabel="humid"
@@ -25,7 +25,7 @@
       color="tempColor()"
       tooltips="true"
       objectequality="true"
-      margin = "{left:75,top:10,bottom:0,right:0}"
+      margin = "{left:75,top:10,bottom:0,right:30}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>
 
@@ -40,6 +40,6 @@
       color="tempColor()"
       tooltips="true"
       objectequality="true"
-      margin = "{left:75,top:10,bottom:30,right:0}"
+      margin = "{left:75,top:10,bottom:30,right:30}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>

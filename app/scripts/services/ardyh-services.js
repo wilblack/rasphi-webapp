@@ -156,7 +156,7 @@ service.
     this.objects = [];
     this.initGraphs = {
         'temp':[{
-            'key':'Temp (C)',
+            'key':'Temp (F)',
             'values': []
         }],
         'humidity':[{
@@ -193,9 +193,11 @@ service.
         var timestamp = new Date(entity.timestamp);
 
         var light = values.light
+        var temp = values.temp
+        if (typeof(temp) === 'number') temp = temp * (9/5) + 32;
         if (typeof(light) === 'number' && light > 10000) light = null;
 
-        obj.graphs.temp[0].values.push([timestamp.valueOf(), values.temp]);
+        obj.graphs.temp[0].values.push([timestamp.valueOf(), temp]);
         obj.graphs.humidity[0].values.push([timestamp.valueOf(), values.humidity]);
         obj.graphs.light[0].values.push([timestamp.valueOf(), light]);
 
