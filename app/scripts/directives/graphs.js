@@ -33,10 +33,20 @@ angular.module('rasphiWebappApp')
             });
 
             scope.tempColor = function(){
+                
+
                 return function(d, i) {
-                    return '#E01B5D'
+                    var color = "#408E2F";
+                    return color;
                 }
-            }
+            };
+
+
+            scope.xAxisTickFormatFunction = function(){
+                return function(d){
+                    return new Date(d).toString("MM-dd hh:mm tt");
+                };
+            };
         }   
     };
 });

@@ -174,7 +174,11 @@ service.
         /*
             
             entity
-            - 
+            - timestamp
+            - data
+              - light
+              - temp
+              - humidity
         */
 
         try {
@@ -187,6 +191,7 @@ service.
         // var maxHistory = $localStorage.getObject('settings').maxHistory;
         var maxHistory = ardyhConf.maxHistory;
         var timestamp = new Date(entity.timestamp);
+
         var light = values.light
         if (typeof(light) === 'number' && light > 10000) light = null;
 

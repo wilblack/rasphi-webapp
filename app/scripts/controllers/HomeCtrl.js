@@ -21,11 +21,6 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
         $localStorage.setObject('settings', ardyhConf.settings);
     }
 
-    $scope.xAxisTickFormatFunction = function(){
-        return function(d){
-            return new Date(d).toString("MM-dd hh:mm tt");
-        };
-    };
 
     $scope.toggleUnits = function(sensor) {
         if (sensor === 'temp') {
@@ -47,7 +42,11 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
             $scope.current.light = data.message.kwargs.light;
             $scope.current.timestamp = new Date(data.message.kwargs.timestamp).toString(ardyhConf.DATETIME_FORMAT);
             
-            //$sensorValues.fetch()
+            var entity = {
+                timestamp: data.message.kwargs.timestamp,
+                data: $scope.current
+            };
+            $sensorValues.updateGraphs(entity)
             
         });
         

@@ -1,40 +1,45 @@
-    <h4>Temperature</h4>
     <nvd3-line-chart
       data="graphs.temp"
-      showXAxis="true"
+      showXAxis="false"
       showYAxis="true"
-      height="250"
+      height="150"
+      yAxisLabel="temp (F)"
       xAxisTickFormat="xAxisTickFormatFunction()"
       forcey="[15, 25]"
       tooltips="true"
       objectequality="true"
       color="tempColor()"
       api="tempApi"
+      margin = "{left:75,top:10,bottom:0,right:0}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>
 
-    <h4>Humidity</h4>
     <nvd3-line-chart
       data="graphs.humidity"
-      showXAxis="true"
+      showXAxis="false"
       showYAxis="true"
-      height="250"
+      height="150"
+      yAxisLabel="humid"
       xAxisTickFormat="xAxisTickFormatFunction()"
       forcey="[0, 100]"
+      color="tempColor()"
       tooltips="true"
       objectequality="true"
+      margin = "{left:75,top:10,bottom:0,right:0}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>
 
-    <h4>Light</h4>
     <nvd3-line-chart
       data="graphs.light"
       showXAxis="true"
       showYAxis="true"
-      height="250"
+      height="150"
+      yAxisLabel="light"
       xAxisTickFormat="xAxisTickFormatFunction()"
-      yDomain="[0, 100]"
+      yDomain="[200, 1000]"
+      color="tempColor()"
       tooltips="true"
       objectequality="true"
+      margin = "{left:75,top:10,bottom:30,right:0}"
       interactive="false"> <!-- This must be kept off or the page won't reload -->
     </nvd3-line-chart>
