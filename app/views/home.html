@@ -10,16 +10,20 @@
                 </div>
                 <div class="panel-body">
                     <div>
-                        temp <span class="large-stat" ng-show="units.temp === 'c'">{{current.temp | number: 1}} &deg;C</span>
-                        <span class="large-stat" ng-show="units.temp === 'f'">{{celsius2fahrenheit(current.temp) | number: 1}} &degF</span>
+                        temp <span change-direction previous="previous.temp" current="current.temp"></span><span class="large-stat" ng-show="units.temp === 'c'">{{current.temp | number: 1}} &deg;C</span>
+                        <span class="large-stat" ng-show="units.temp === 'f'">{{celsius2fahrenheit(current.temp) | number: 1}}&degF</span>
+                        
+                        
 
-                        humid <span class="item item-text-wrap large-stat">
+                        
+                        &nbsp;&nbsp;humid <span change-direction previous="previous.humidity" current="current.humidity"></span><span class="item item-text-wrap large-stat">
                             {{current.humidity | number: 1}}% 
                         </span>
-
-                        light <span class="item item-text-wrap large-stat">
+                        
+                        &nbsp;&nbsp;light <span change-direction previous="previous.light" current="current.light"></span><span class="item item-text-wrap large-stat">
                             {{current.light | number: 0}} </span>
                         </span>
+                        
                     </div>
 
                     <div>

@@ -10,6 +10,20 @@ $tertiary: #7B9F35;
 $tertiary-light: #D4EE9F;
 $tertiary-dark: #354F00;
 
+
+
+.red {
+    color:#FF0000;
+}
+
+.blue {
+    color:#0000FF;
+}
+
+.green {
+    color:$primary;
+}
+
 .large-stat {
     font-size: 2em;
     color: $tertiary;
@@ -22,7 +36,10 @@ $tertiary-dark: #354F00;
     }
 
     .panel-body {
-        
-
     }
+}
+
+
+.change-directions {
+    display:inline-block;
 }

@@ -153,6 +153,7 @@ service.
 
 .service('$sensorValues', ['$rootScope', '$localStorage', '$q', '$http', 'ardyhConf', function($rootScope, $localStorage, $q, $http, ardyhConf) {
     var obj = this;
+    this.status = '';
     this.objects = [];
     this.initGraphs = {
         'temp':[{
@@ -180,6 +181,8 @@ service.
               - temp
               - humidity
         */
+
+        if (obj.status === 'pending') return;
 
         try {
             var values = entity.data;
@@ -218,21 +221,22 @@ service.
         /*
             Returns a promoise
         */ 
+        obj.status = 'pending';
         obj.graphs = obj.initGraphs;
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
         var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
 
-
-
         $http.get(resource)
             .success(function(data, status){
+                obj.status = '';
                 _.each(data.reverse(), function(entity){
                     obj.updateGraphs(entity);
                 });
                 defer.resolve(obj.graphs, status);
             })
             .error(function(data, status){
+                obj.status = '';
                 defer.reject(data, status);
             });
         return defer.promise;

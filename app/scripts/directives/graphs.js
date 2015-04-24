@@ -49,4 +49,20 @@ angular.module('rasphiWebappApp')
             };
         }   
     };
+})
+
+.directive('changeDirection', function($sensorValues){
+    return{
+        scope:{
+            previous: "=",
+            current: "="
+            },
+        templateUrl: 'views/partials/change-direction.html',
+        restrict: 'EA',
+        link: function(scope, elem, attrs){
+
+            
+        }
+    };
 });
+

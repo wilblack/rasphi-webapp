@@ -5,6 +5,8 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
 
+    $scope.previous = {};
+    $scope.previous.temp = 0;
     $scope.current.temp = "--";
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
@@ -37,6 +39,8 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     };
     $rootScope.$on('new-sensor-values', function(event, data){
         $scope.$apply(function(){ // Needed this because the $braodcast is on he $rootScope
+            $scope.previous = angular.copy($scope.current);
+
             $scope.current.temp = data.message.kwargs.temp;
             $scope.current.humidity = data.message.kwargs.humidity;
             $scope.current.light = data.message.kwargs.light;
@@ -46,7 +50,7 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
                 timestamp: data.message.kwargs.timestamp,
                 data: $scope.current
             };
-            $sensorValues.updateGraphs(entity)
+            $sensorValues.updateGraphs(entity);
             
         });
         
