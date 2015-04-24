@@ -8596,13 +8596,33 @@ body {
     border-bottom: 0;
   }
 }
-/* line 13, ../../app/styles/growbot.scss */
+/* line 15, ../../app/styles/growbot.scss */
+.red {
+  color: #FF0000;
+}
+
+/* line 19, ../../app/styles/growbot.scss */
+.blue {
+  color: #0000FF;
+}
+
+/* line 23, ../../app/styles/growbot.scss */
+.green {
+  color: #408E2F;
+}
+
+/* line 27, ../../app/styles/growbot.scss */
 .large-stat {
   font-size: 2em;
   color: #7B9F35;
 }
 
-/* line 20, ../../app/styles/growbot.scss */
+/* line 34, ../../app/styles/growbot.scss */
 .bot-panel .panel-heading {
   background-color: #D4EE9F;
+}
+
+/* line 43, ../../app/styles/growbot.scss */
+.change-directions {
+  display: inline-block;
 }
