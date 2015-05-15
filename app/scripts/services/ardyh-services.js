@@ -217,7 +217,7 @@ service.
         
     }
 
-    this.fetch = function() {
+    this.fetch = function(filters) {
         /*
             Returns a promoise
         */ 
@@ -226,6 +226,16 @@ service.
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
         var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
+        var value;
+
+        if (filters){
+            for (var filter in filters){
+                console.log(filter);
+                value = filters[filter];
+                resource = resource + "&"+filter+"="+value;
+            }
+            console.log(resource);
+        }
 
         $http.get(resource)
             .success(function(data, status){

@@ -47,6 +47,20 @@ angular.module('rasphiWebappApp')
                     return new Date(d).toString("ddd hh:mmt");
                 };
             };
+
+            scope.timeFilterCallback = function(value) {
+                console.log(value);
+                var now = new Date();
+                var days = value.split("-")[1];
+                console.log(days);
+                var then = now.addDays(-parseInt(days, 10));
+                console.log("then: ", then.toISOString());
+                filters = {
+                    "timestamp_gte":then.toISOString()
+                }
+                $sensorValues.fetch(filters);
+                
+            };
         }   
     };
 })
