@@ -23,7 +23,7 @@ angular
 
 
   .constant('ardyhConf', {
-      'version':'0.05.15',
+      'version':'0.05.15b',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -321,13 +321,18 @@ service.
         var maxHistory = ardyhConf.maxHistory;
         var timestamp = new Date(entity.timestamp);
 
-        var light = values.light
-        var temp = values.temp
+        var light = values.light;
+        var temp = values.temp;
+        var humidity = values.humidity;
+        
         if (typeof(temp) === 'number') temp = temp * (9/5) + 32;
         if (typeof(light) === 'number' && light > 10000) light = null;
 
+        if (temp === 0) temp = null;
+        if (humidity === 0) humidity = null;
+
         obj.graphs.temp[0].values.push([timestamp.valueOf(), temp]);
-        obj.graphs.humidity[0].values.push([timestamp.valueOf(), values.humidity]);
+        obj.graphs.humidity[0].values.push([timestamp.valueOf(), humidity]);
         obj.graphs.light[0].values.push([timestamp.valueOf(), light]);
 
 
@@ -365,7 +370,7 @@ service.
 
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
-        var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
+        var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?b=";
         var value;
 
         if (filters){
