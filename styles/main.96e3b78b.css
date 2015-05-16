@@ -8626,3 +8626,10 @@ body {
 .change-directions {
   display: inline-block;
 }
+
+/* line 48, ../../app/styles/growbot.scss */
+ul[rn-carousel] {
+  width: 400px;
+  height: 225px;
+  margin: 0 auto;
+}

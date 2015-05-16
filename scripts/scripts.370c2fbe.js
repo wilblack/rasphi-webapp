@@ -18,7 +18,9 @@ angular
     'ngTouch',
     'ardyh.services',
     'rasphi.services',
-    'nvd3ChartDirectives'
+    'nvd3ChartDirectives',
+    'mgcrea.ngStrap',
+    'angular-carousel'
   ])
 
 
@@ -43,6 +45,10 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/log-form', {
+        templateUrl: 'views/log-form.html',
+        controller: 'LogFormCtrl'
+      })
       .when('/settings', {
         templateUrl: 'views/settings.html',
         controller: 'SettingsCtrl'
@@ -53,7 +59,7 @@ angular
   });
 
 var app = angular.module("rasphiWebappApp");
-app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
@@ -64,7 +70,7 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     $scope.current.temp = "--";
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
-    
+    $scope.carouselIndex = 0;
     $scope.refreshSensorValues = function(){
         console.log("[refreshSensorValues()]");
         $ardyh.sendCommand('read_sensors');
@@ -110,6 +116,13 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
         
     });
 
+    $images.fetchList()
+    .then(function(data, status){
+        $scope.images = data.slice(-10);
+    }, function(data, status){
+
+    });
+
     // $rootScope.$on('graphs-updated', function(event, data){
     //     $scope.graphs = $sensorValues.graphs;
     // });
@@ -124,6 +137,28 @@ angular.module('rasphiWebappApp')
 .controller('SettingsCtrl', function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user, $ionicLoading) {
 
 })
+var app = angular.module("rasphiWebappApp");
+app.controller("LogFormCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+    $scope.page = 'log-form';
+
+
+    $scope.entryChoices = [
+        {'vallue':'other', 'verbose':'----'},
+        {'value':'feed', 'verbose':'Feeding'},
+        {'value':'water', 'verbose':'Watering'},
+        {'value':'spray', 'verbose':'Spray'},
+        {'value':'humidty', 'verbose':'Humidity Change'},
+        {'vallue':'light', 'verbose':'Lighting Change'}
+    ];   
+
+    $scope.entry = {
+        "timestamp":new Date(),
+        "entry":"",
+        "type":"other"  
+    };
+
+
+});
 'use strict';
 
 /* Services */
@@ -274,6 +309,35 @@ service.
     }
 
     this.init(ardyhConf.settings.botName);
+
+}])
+
+.service('$images',['$rootScope', '$http', '$q', 'ardyhConf', function($rootScope, $http, $q, ardyhConf){
+    var obj = this;
+    obj.url = "http://ardyh.solalla.com/growbot";
+    
+    this.fetchList = function(){
+        var defer = $q.defer();
+        $http.get(obj.url)
+            .success(function(data, status){
+                var hrefs = data.match(/href="([^"]*")/g)
+                var out = _.map(hrefs, function(href){
+                    var pieces = href.split('href="')
+                    if (pieces.length == 2 ){
+                        return obj.url + "/" + pieces[1].replace('"', '');
+                    } else {
+                        return null;
+                    }
+                });
+                out = _.compact(out);
+                defer.resolve(out, status);
+            })
+            .error(function(data, status){
+                defer.reject(data, status);
+            });
+        return defer.promise;
+    };
+
 
 }])
 
