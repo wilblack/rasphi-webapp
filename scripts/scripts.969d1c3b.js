@@ -23,7 +23,7 @@ angular
 
 
   .constant('ardyhConf', {
-      'version':'0.04.22',
+      'version':'0.05.15',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -343,15 +343,39 @@ service.
         
     }
 
-    this.fetch = function() {
+    this.clearGraphs = function(){
+        _.each(obj.graphs.temp[0].values, function(){
+            obj.graphs.temp[0].values.shift();
+        });
+        _.each(obj.graphs.light[0].values, function(){
+            obj.graphs.light[0].values.shift();
+        });
+        _.each(obj.graphs.humidity[0].values, function(){
+            obj.graphs.humidity[0].values.shift();
+        });
+    }
+
+    this.fetch = function(filters) {
         /*
             Returns a promoise
         */ 
         obj.status = 'pending';
-        obj.graphs = obj.initGraphs;
+        obj.clearGraphs();
+
+
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
         var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;
+        var value;
+
+        if (filters){
+            for (var filter in filters){
+                console.log(filter);
+                value = filters[filter];
+                resource = resource + "&"+filter+"="+value;
+            }
+            console.log(resource);
+        }
 
         $http.get(resource)
             .success(function(data, status){
@@ -443,8 +467,7 @@ angular.module('rasphiWebappApp')
         templateUrl: 'views/partials/bot-graphs.html',
         restrict: 'EA',
         link: function(scope, elem, attrs){
-
-            scope.graphs = {
+            var emptyGraphs = {
                 'temp':[{
                     'key':'Temp (C)',
                     'values': []
@@ -459,14 +482,18 @@ angular.module('rasphiWebappApp')
                 }]
             };
 
+            scope.graphs = emptyGraphs;
+
             //Grab archived data
-            $sensorValues.fetch()
-            .then(function(data, status){
-                console.log("successly fetch sensorValues");
-                scope.graphs = $sensorValues.graphs;
-            },function(data, status) {
-                console.log("failed to fetch sensorValues");
-            });
+
+
+            // $sensorValues.fetch()
+            // .then(function(data, status){
+            //     console.log("successly fetch sensorValues");
+            //     scope.graphs = $sensorValues.graphs;
+            // },function(data, status) {
+            //     console.log("failed to fetch sensorValues");
+            // });
 
             scope.tempColor = function(){
                 
@@ -483,6 +510,28 @@ angular.module('rasphiWebappApp')
                     return new Date(d).toString("ddd hh:mmt");
                 };
             };
+
+            scope.timeFilterCallback = function(value) {
+                
+                scope.timestampFilter = value;
+                var now = new Date();
+                var days = value.split("-")[1];
+                var then = now.addDays(-parseInt(days, 10)).addHours(-7);
+                console.log("then: ", then.toISOString());
+                filters = {
+                    "timestamp_gte":then.toISOString()
+                }
+                $sensorValues.fetch(filters)
+                .then(function(data, status){
+                    console.log("successly fetch sensorValues: ", $sensorValues.graphs.temp[0].values.length);
+                    scope.graphs = emptyGraphs;
+                    scope.graphs = $sensorValues.graphs;
+                },function(data, status) {
+                    console.log("failed to fetch sensorValues");
+                });
+            };
+
+            scope.timeFilterCallback('last-1-days');
         }   
     };
 })
