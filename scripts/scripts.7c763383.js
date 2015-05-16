@@ -518,9 +518,10 @@ angular.module('rasphiWebappApp')
                 var days = value.split("-")[1];
                 var then = now.addDays(-parseInt(days, 10)).addHours(-7);
                 console.log("then: ", then.toISOString());
-                filters = {
+                var filters = {
                     "timestamp_gte":then.toISOString()
-                }
+                };
+                
                 $sensorValues.fetch(filters)
                 .then(function(data, status){
                     console.log("successly fetch sensorValues: ", $sensorValues.graphs.temp[0].values.length);
