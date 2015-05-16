@@ -70,7 +70,12 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
     $scope.current.temp = "--";
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
-    $scope.carouselIndex = 0;
+    $scope.carouselIndex = 1;
+
+    $scope.captureImage = function(){
+        $images.captureImage();
+    }
+
     $scope.refreshSensorValues = function(){
         console.log("[refreshSensorValues()]");
         $ardyh.sendCommand('read_sensors');
@@ -118,7 +123,7 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
 
     $images.fetchList()
     .then(function(data, status){
-        $scope.images = data.slice(-10);
+        $scope.images = data.slice(-10).reverse();
     }, function(data, status){
 
     });
@@ -312,7 +317,7 @@ service.
 
 }])
 
-.service('$images',['$rootScope', '$http', '$q', 'ardyhConf', function($rootScope, $http, $q, ardyhConf){
+.service('$images',['$rootScope', '$http', '$q', '$ardyh', 'ardyhConf', function($rootScope, $http, $q, $ardyh, ardyhConf){
     var obj = this;
     obj.url = "http://ardyh.solalla.com/growbot";
     
@@ -337,6 +342,11 @@ service.
             });
         return defer.promise;
     };
+
+    this.captureImage = function(){
+
+        $ardyh.sendCommand('capture_image',{})
+    }
 
 
 }])

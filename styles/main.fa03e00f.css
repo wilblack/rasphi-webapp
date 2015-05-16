@@ -8622,12 +8622,12 @@ body {
   background-color: #D4EE9F;
 }
 
-/* line 43, ../../app/styles/growbot.scss */
+/* line 42, ../../app/styles/growbot.scss */
 .change-directions {
   display: inline-block;
 }
 
-/* line 48, ../../app/styles/growbot.scss */
+/* line 47, ../../app/styles/growbot.scss */
 ul[rn-carousel] {
   width: 400px;
   height: 225px;
