@@ -29,7 +29,8 @@
                     <div>
                         Last updated {{current.timestamp}}
                         <button class="btn btn-default btn-small" ng-click='refreshSensorValues()'><span class="glyphicon glyphicon-refresh"></span></button>
-                        
+                                                
+                        <button class="btn btn-default btn-small" ng-click='captureImage()'><span class="glyphicon glyphicon-camera"></span></button>
                     </div>
                     <div bot-graphs></div>
 
@@ -38,7 +39,9 @@
                         <ul rn-carousel class="image" rn-carousel-controls rn-carousel-index="carouselIndex">
                           <li ng-repeat="image in images">
                             {{image}}
-                            <div class="layer"><img src="{{image}}"></img></div>
+                            <div class="layer">
+                                <a href="{{image}}" target="_blank"><img src="{{image}}"></img></a>
+                            </div>
                           </li>
                         </ul>
                         <div rn-carousel-indicators ng-if="images.length > 1" slides="images" rn-carousel-index="carouselIndex"></div>

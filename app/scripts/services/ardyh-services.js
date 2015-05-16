@@ -151,7 +151,7 @@ service.
 
 }])
 
-.service('$images',['$rootScope', '$http', '$q', 'ardyhConf', function($rootScope, $http, $q, ardyhConf){
+.service('$images',['$rootScope', '$http', '$q', '$ardyh', 'ardyhConf', function($rootScope, $http, $q, $ardyh, ardyhConf){
     var obj = this;
     obj.url = "http://ardyh.solalla.com/growbot";
     
@@ -176,6 +176,11 @@ service.
             });
         return defer.promise;
     };
+
+    this.captureImage = function(){
+
+        $ardyh.sendCommand('capture_image',{})
+    }
 
 
 }])
