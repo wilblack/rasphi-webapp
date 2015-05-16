@@ -217,12 +217,26 @@ service.
         
     }
 
+    this.clearGraphs = function(){
+        _.each(obj.graphs.temp[0].values, function(){
+            obj.graphs.temp[0].values.shift();
+        });
+        _.each(obj.graphs.light[0].values, function(){
+            obj.graphs.light[0].values.shift();
+        });
+        _.each(obj.graphs.humidity[0].values, function(){
+            obj.graphs.humidity[0].values.shift();
+        });
+    }
+
     this.fetch = function(filters) {
         /*
             Returns a promoise
         */ 
         obj.status = 'pending';
-        obj.graphs = obj.initGraphs;
+        obj.clearGraphs();
+
+
         var defer = $q.defer();
         var botName = "rpi2.solalla.ardyh";
         var resource = "http://ardyh.solalla.com:9093/sensor-values/"+botName+"/?limit="+ardyhConf.settings.maxHistory;

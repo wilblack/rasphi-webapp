@@ -7,8 +7,7 @@ angular.module('rasphiWebappApp')
         templateUrl: 'views/partials/bot-graphs.html',
         restrict: 'EA',
         link: function(scope, elem, attrs){
-
-            scope.graphs = {
+            var emptyGraphs = {
                 'temp':[{
                     'key':'Temp (C)',
                     'values': []
@@ -23,14 +22,18 @@ angular.module('rasphiWebappApp')
                 }]
             };
 
+            scope.graphs = emptyGraphs;
+
             //Grab archived data
-            $sensorValues.fetch()
-            .then(function(data, status){
-                console.log("successly fetch sensorValues");
-                scope.graphs = $sensorValues.graphs;
-            },function(data, status) {
-                console.log("failed to fetch sensorValues");
-            });
+
+
+            // $sensorValues.fetch()
+            // .then(function(data, status){
+            //     console.log("successly fetch sensorValues");
+            //     scope.graphs = $sensorValues.graphs;
+            // },function(data, status) {
+            //     console.log("failed to fetch sensorValues");
+            // });
 
             scope.tempColor = function(){
                 
@@ -49,18 +52,26 @@ angular.module('rasphiWebappApp')
             };
 
             scope.timeFilterCallback = function(value) {
-                console.log(value);
+                
+                scope.timestampFilter = value;
                 var now = new Date();
                 var days = value.split("-")[1];
-                console.log(days);
-                var then = now.addDays(-parseInt(days, 10));
+                var then = now.addDays(-parseInt(days, 10)).addHours(-7);
                 console.log("then: ", then.toISOString());
                 filters = {
                     "timestamp_gte":then.toISOString()
                 }
-                $sensorValues.fetch(filters);
-                
+                $sensorValues.fetch(filters)
+                .then(function(data, status){
+                    console.log("successly fetch sensorValues: ", $sensorValues.graphs.temp[0].values.length);
+                    scope.graphs = emptyGraphs;
+                    scope.graphs = $sensorValues.graphs;
+                },function(data, status) {
+                    console.log("failed to fetch sensorValues");
+                });
             };
+
+            scope.timeFilterCallback('last-1-days');
         }   
     };
 })
