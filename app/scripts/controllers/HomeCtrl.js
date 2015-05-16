@@ -1,5 +1,5 @@
 var app = angular.module("rasphiWebappApp");
-app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user) {
     $scope.page = 'home';
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
@@ -10,7 +10,7 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
     $scope.current.temp = "--";
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
-    
+    $scope.carouselIndex = 0;
     $scope.refreshSensorValues = function(){
         console.log("[refreshSensorValues()]");
         $ardyh.sendCommand('read_sensors');
@@ -54,6 +54,13 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, a
             
         });
         
+    });
+
+    $images.fetchList()
+    .then(function(data, status){
+        $scope.images = data.slice(-10);
+    }, function(data, status){
+
     });
 
     // $rootScope.$on('graphs-updated', function(event, data){

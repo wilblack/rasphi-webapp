@@ -18,7 +18,9 @@ angular
     'ngTouch',
     'ardyh.services',
     'rasphi.services',
-    'nvd3ChartDirectives'
+    'nvd3ChartDirectives',
+    'mgcrea.ngStrap',
+    'angular-carousel'
   ])
 
 
@@ -42,6 +44,10 @@ angular
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
+      })
+      .when('/log-form', {
+        templateUrl: 'views/log-form.html',
+        controller: 'LogFormCtrl'
       })
       .when('/settings', {
         templateUrl: 'views/settings.html',

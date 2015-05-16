@@ -43,3 +43,10 @@ $tertiary-dark: #354F00;
 .change-directions {
     display:inline-block;
 }
+
+
+ul[rn-carousel] {
+    width:400px;
+    height:225px;
+    margin: 0 auto;
+}

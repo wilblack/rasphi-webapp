@@ -151,6 +151,35 @@ service.
 
 }])
 
+.service('$images',['$rootScope', '$http', '$q', 'ardyhConf', function($rootScope, $http, $q, ardyhConf){
+    var obj = this;
+    obj.url = "http://ardyh.solalla.com/growbot";
+    
+    this.fetchList = function(){
+        var defer = $q.defer();
+        $http.get(obj.url)
+            .success(function(data, status){
+                var hrefs = data.match(/href="([^"]*")/g)
+                var out = _.map(hrefs, function(href){
+                    var pieces = href.split('href="')
+                    if (pieces.length == 2 ){
+                        return obj.url + "/" + pieces[1].replace('"', '');
+                    } else {
+                        return null;
+                    }
+                });
+                out = _.compact(out);
+                defer.resolve(out, status);
+            })
+            .error(function(data, status){
+                defer.reject(data, status);
+            });
+        return defer.promise;
+    };
+
+
+}])
+
 .service('$sensorValues', ['$rootScope', '$localStorage', '$q', '$http', 'ardyhConf', function($rootScope, $localStorage, $q, $http, ardyhConf) {
     var obj = this;
     this.status = '';
