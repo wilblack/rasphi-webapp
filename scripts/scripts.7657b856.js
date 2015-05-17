@@ -25,7 +25,7 @@ angular
 
 
   .constant('ardyhConf', {
-      'version':'0.05.15b',
+      'version':'0.05.17',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -64,7 +64,8 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
-
+    $scope.images = [];
+    
     $scope.previous = {};
     $scope.previous.temp = 0;
     $scope.current.temp = "--";

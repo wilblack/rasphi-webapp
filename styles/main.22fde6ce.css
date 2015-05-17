@@ -8630,6 +8630,24 @@ body {
 /* line 47, ../../app/styles/growbot.scss */
 ul[rn-carousel] {
   width: 400px;
-  height: 225px;
+  height: 280px;
   margin: 0 auto;
+}
+/* line 52, ../../app/styles/growbot.scss */
+ul[rn-carousel] img {
+  width: 400px;
+}
+
+/* line 57, ../../app/styles/growbot.scss */
+div[rn-carousel-indicators] {
+  text-align: center;
+}
+/* line 60, ../../app/styles/growbot.scss */
+div[rn-carousel-indicators] span {
+  color: #9AD58E;
+  font-size: 1.5em;
+}
+/* line 65, ../../app/styles/growbot.scss */
+div[rn-carousel-indicators] span.active {
+  color: #354F00;
 }
