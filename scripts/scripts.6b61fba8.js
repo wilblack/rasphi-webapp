@@ -184,7 +184,7 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
 
 });
 var app = angular.module("rasphiWebappApp");
-app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user, ardyhConf) {
+app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user) {
     $scope.page = 'journal';
     $scope.ardyhConf = ardyhConf;
     $scope.journal = $journal;
