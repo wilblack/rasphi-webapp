@@ -8651,3 +8651,12 @@ div[rn-carousel-indicators] span {
 div[rn-carousel-indicators] span.active {
   color: #354F00;
 }
+
+/* line 72, ../../app/styles/growbot.scss */
+.journal .media-left {
+  vertical-align: middle;
+}
+/* line 74, ../../app/styles/growbot.scss */
+.journal .media-left i.journal-type {
+  font-size: 2.5em;
+}

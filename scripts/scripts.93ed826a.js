@@ -17,15 +17,20 @@ angular
     'ngSanitize',
     'ngTouch',
     'ardyh.services',
-    'rasphi.services',
+    'growbot.services',
     'nvd3ChartDirectives',
     'mgcrea.ngStrap',
-    'angular-carousel'
+    'angular-carousel',
+
+    'firebase',
+    'firebase.services',
+
   ])
 
 
   .constant('ardyhConf', {
-      'version':'0.05.17',
+      'firebaseName': 'rasphi',
+      'version':'0.06.02',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -45,6 +50,11 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/journal', {
+        templateUrl: 'views/journal.html',
+        controller: 'JournalCtrl'
+      })
+
       .when('/log-form', {
         templateUrl: 'views/log-form.html',
         controller: 'LogFormCtrl'
@@ -124,14 +134,12 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
 
     $images.fetchList()
     .then(function(data, status){
-        $scope.images = data.slice(-10).reverse();
+        $scope.images = data.slice(-12).reverse();
     }, function(data, status){
-
+        
     });
 
-    // $rootScope.$on('graphs-updated', function(event, data){
-    //     $scope.graphs = $sensorValues.graphs;
-    // });
+
 
     $rootScope.$on('ardyh-connection-open', function(event, data){
         $scope.refreshSensorValues();
@@ -144,25 +152,53 @@ angular.module('rasphiWebappApp')
 
 })
 var app = angular.module("rasphiWebappApp");
-app.controller("LogFormCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location) {
     $scope.page = 'log-form';
 
 
-    $scope.entryChoices = [
-        {'vallue':'other', 'verbose':'----'},
-        {'value':'feed', 'verbose':'Feeding'},
-        {'value':'water', 'verbose':'Watering'},
-        {'value':'spray', 'verbose':'Spray'},
-        {'value':'humidty', 'verbose':'Humidity Change'},
-        {'vallue':'light', 'verbose':'Lighting Change'}
-    ];   
+    $scope.entryChoices = $journal.entryTypeChoices;
+   
 
+    $scope.getTimestamp = function(){
+        var now = new Date();
+        return now.toISOString();
+    }
     $scope.entry = {
-        "timestamp":new Date(),
+        "date": $scope.getTimestamp(),
+        "time": $scope.getTimestamp(),
         "entry":"",
-        "type":"other"  
+        "type":"other",
+        "id": null
     };
 
+
+    $scope.saveEntry = function(){
+        var entry = angular.copy($scope.entry);
+        if (!entry.id) {
+            entry.id = $ardyh.generateUUID();
+        } 
+        $journal.save(entry);
+        $location.path("journal");
+    }
+
+
+});
+var app = angular.module("rasphiWebappApp");
+app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user, ardyhConf) {
+    $scope.page = 'journal';
+    $scope.ardyhConf = ardyhConf;
+    $scope.journal = $journal;
+
+    $scope.type2color = function(type){
+        var color = $journal.type2color(type);
+        return {'color':color};
+    };
+
+    $scope.type2icon = function(type){
+        var icon = $journal.type2icon(type);
+        return icon;
+        
+    };
 
 });
 'use strict';
@@ -314,6 +350,15 @@ service.
         obj.send({'command':command, 'kwargs':kwargs});
     }
 
+    this.generateUUID = function() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    };
     this.init(ardyhConf.settings.botName);
 
 }])
@@ -509,11 +554,17 @@ service.
     },
     getObject: function(key) {
       return JSON.parse($window.localStorage[key] || '{}');
+    },
+    setArray: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getArray: function(key) {
+      return JSON.parse($window.localStorage[key] || '[]');
     }
   }
 }]);
 "use strict";
-var service = angular.module('rasphi.services', []).
+var service = angular.module('growbot.services', []).
   value('version', '0.1');
 
 // This example is taken from https://github.com/totaljs/examples/tree/master/angularjs-websocket
@@ -537,7 +588,103 @@ service.service('$user', function( $localStorage){
         obj.object = $localStorage.getObject('user');
         callback(obj.object);
     };
+})
+
+
+.service('$journal', function($localStorage, $fbJournal){
+    var obj = this;
+    obj.entries = $fbJournal.data;
+
+    obj.entryTypeChoices = [
+        {'value':'other', 'verbose':null, 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
+        {'value':'feed', 'verbose':'Feeding', 'color':'#00FF00', 'icon':'glyphicon glyphicon-leaf'},
+        {'value':'water', 'verbose':'Watering', 'color':'#0000FF', 'icon':'glyphicon glyphicon-tint'},
+        {'value':'spray', 'verbose':'Spray', 'color':'#0077FF', 'icon':'glyphicon glyphicon-certificate'},
+        {'value':'humidty', 'verbose':'Humidity Change', 'color':'#00FFFF', 'icon':'glyphicon glyphicon-cloud'},
+        {'value':'light', 'verbose':'Lighting Change', 'color':'#FF7700', 'icon':'glyphicon glyphicon-lamp'}
+    ];   
+    
+    obj.type2color = function(type) {
+        var out = null;
+        out = _.find(obj.entryTypeChoices, function(item){
+            return (item.value === type);
+        });
+        return out.color;
+    };
+
+    obj.type2icon = function(type) {
+        var out = null;
+        out = _.find(obj.entryTypeChoices, function(item){
+            return (item.value === type);
+        });
+        return out.icon;
+    };
+
+
+    obj.save = function(entry){
+        obj.entries.$add(entry);
+        
+        //$localStorage.setArray('entries', obj.entries);
+    }
+
 });
+'use strict';
+
+var service = angular.module('firebase.services', []).
+  value('version', '1.0');
+
+service.service( '$firebaseApi', ['$rootScope', 
+                           '$http', 
+                           '$q', 
+                           'ardyhConf', 
+                           '$bot', 
+                           '$group', 
+                           '$user', 
+                 function($rootScope, 
+                          $http, 
+                          $q, 
+                          ardyhConf, 
+                          $bot, 
+                          $group,
+                          $user,
+                          $journal
+) {
+
+    var obj = this;
+    this.bot = $bots;
+    this.user = $user;
+    this.group = $group;
+    this.journal = $journal;
+}])
+
+
+.service( '$bot', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
+    var obj = this;
+    this.name = 'bot'
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
+    this.data = $firebaseArray(this.ref);
+}])
+
+.service( '$group', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
+    var obj = this;
+    this.name = 'group'
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
+    this.data = $firebaseArray(this.ref);
+}])
+
+.service( '$user', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
+    var obj = this;
+    this.name = 'user'
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
+    this.data = $firebaseArray(this.ref);
+}])
+
+.service( '$fbJournal', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
+    var obj = this;
+    this.name = 'journal'
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
+    this.data = $firebaseArray(this.ref.orderByChild('date'));
+}])
 'user strict';
 
 angular.module('rasphiWebappApp')
