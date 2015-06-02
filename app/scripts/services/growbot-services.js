@@ -26,12 +26,12 @@ service.service('$user', function( $localStorage){
 })
 
 
-.service('$journal', function($localStorage){
+.service('$journal', function($localStorage, $fbJournal){
     var obj = this;
-    obj.entries = $localStorage.getArray('entries');
+    obj.entries = $fbJournal.data;
 
     obj.entryTypeChoices = [
-        {'value':'other', 'verbose':null, 'color':'#333333', 'icon':'glyphicon glyphicon-record'},
+        {'value':'other', 'verbose':null, 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
         {'value':'feed', 'verbose':'Feeding', 'color':'#00FF00', 'icon':'glyphicon glyphicon-leaf'},
         {'value':'water', 'verbose':'Watering', 'color':'#0000FF', 'icon':'glyphicon glyphicon-tint'},
         {'value':'spray', 'verbose':'Spray', 'color':'#0077FF', 'icon':'glyphicon glyphicon-certificate'},
@@ -44,7 +44,6 @@ service.service('$user', function( $localStorage){
         out = _.find(obj.entryTypeChoices, function(item){
             return (item.value === type);
         });
-        console.log(out)
         return out.color;
     };
 
@@ -56,9 +55,11 @@ service.service('$user', function( $localStorage){
         return out.icon;
     };
 
+
     obj.save = function(entry){
-        obj.entries.push(entry);
-        $localStorage.setArray('entries', obj.entries);
+        obj.entries.$add(entry);
+        
+        //$localStorage.setArray('entries', obj.entries);
     }
 
 });

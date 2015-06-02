@@ -18,16 +18,19 @@ angular
     'ngTouch',
     'ardyh.services',
     'growbot.services',
-    // 'firebase-services',
     'nvd3ChartDirectives',
     'mgcrea.ngStrap',
     'angular-carousel',
+
+    'firebase',
+    'firebase.services',
 
   ])
 
 
   .constant('ardyhConf', {
-      'version':'0.05.17',
+      'firebaseName': 'rasphi',
+      'version':'0.06.02',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',

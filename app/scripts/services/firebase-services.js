@@ -6,14 +6,14 @@ var service = angular.module('firebase.services', []).
 service.service( '$firebaseApi', ['$rootScope', 
                            '$http', 
                            '$q', 
-                           'config', 
+                           'ardyhConf', 
                            '$bot', 
                            '$group', 
                            '$user', 
                  function($rootScope, 
                           $http, 
                           $q, 
-                          config, 
+                          ardyhConf, 
                           $bot, 
                           $group,
                           $user,
@@ -28,30 +28,30 @@ service.service( '$firebaseApi', ['$rootScope',
 }])
 
 
-.service( '$bot', ['$rootScope', '$http', '$q', '$firebaseArray', 'config', function($rootScope, $http, $q, $firebaseArray, config) {
+.service( '$bot', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
     var obj = this;
     this.name = 'bot'
-    this.ref = new Firebase("https://"+config.firebaseName+".firebaseio.com/" + obj.name);
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
     this.data = $firebaseArray(this.ref);
 }])
 
-.service( '$group', ['$rootScope', '$http', '$q', '$firebaseArray', 'config', function($rootScope, $http, $q, $firebaseArray, config) {
+.service( '$group', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
     var obj = this;
     this.name = 'group'
-    this.ref = new Firebase("https://"+config.firebaseName+".firebaseio.com/" + obj.name);
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
     this.data = $firebaseArray(this.ref);
 }])
 
-.service( '$user', ['$rootScope', '$http', '$q', '$firebaseArray', 'config', function($rootScope, $http, $q, $firebaseArray, config) {
+.service( '$user', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
     var obj = this;
     this.name = 'user'
-    this.ref = new Firebase("https://"+config.firebaseName+".firebaseio.com/" + obj.name);
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
     this.data = $firebaseArray(this.ref);
 }])
 
-.service( '$journal', ['$rootScope', '$http', '$q', '$firebaseArray', 'config', function($rootScope, $http, $q, $firebaseArray, config) {
+.service( '$fbJournal', ['$rootScope', '$http', '$q', '$firebaseArray', 'ardyhConf', function($rootScope, $http, $q, $firebaseArray, ardyhConf) {
     var obj = this;
     this.name = 'journal'
-    this.ref = new Firebase("https://"+config.firebaseName+".firebaseio.com/" + obj.name);
-    this.data = $firebaseArray(this.ref);
+    this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
+    this.data = $firebaseArray(this.ref.orderByChild('date'));
 }])
