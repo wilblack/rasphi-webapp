@@ -4,7 +4,8 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
     $scope.units = {'temp':'f'};
-
+    $scope.images = [];
+    
     $scope.previous = {};
     $scope.previous.temp = 0;
     $scope.current.temp = "--";
@@ -61,16 +62,14 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
         
     });
 
-    $images.fetchList()
-    .then(function(data, status){
-        $scope.images = data.slice(-10).reverse();
-    }, function(data, status){
+    // $images.fetchList()
+    // .then(function(data, status){
+    //     $scope.images = data.slice(-10).reverse();
+    // }, function(data, status){
 
-    });
-
-    // $rootScope.$on('graphs-updated', function(event, data){
-    //     $scope.graphs = $sensorValues.graphs;
     // });
+
+
 
     $rootScope.$on('ardyh-connection-open', function(event, data){
         $scope.refreshSensorValues();

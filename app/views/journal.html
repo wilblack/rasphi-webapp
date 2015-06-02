@@ -1,0 +1,24 @@
+<ng-include src="'views/partials/header.html'"></ng-include>
+
+<div class="row">
+    <div class="col col-sm-8 col-sm-offset-2">
+        <a href="#/log-form" class="btn btn-success"><i class="glyphicon glyphicon-plus-sign"></i></a>
+        <div ng-show="journal.length === 0">You have no journal entries.</div>
+        
+
+        <div class="media" ng-repeat="entry in journal.entries track by $index">
+            
+            <div class="media-left">
+                <i class="type2icon(entry.type);" ng-style="type2color(entry.type);" ></i>
+            </div>
+
+            <div class="media-body">
+                <h4>{{entry.date | date:'mediumDate'}} {{entry.time | date:'mediumTime'}}</h4>
+
+                <p>{{entry.entry}}</p>
+            </div>
+        </div>
+
+
+    </div>
+</div>

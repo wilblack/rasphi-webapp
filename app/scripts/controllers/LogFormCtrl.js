@@ -1,22 +1,32 @@
 var app = angular.module("rasphiWebappApp");
-app.controller("LogFormCtrl", function($rootScope, $scope, $ardyh, $sensorValues, ardyhConf, $localStorage, $user) {
+app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location) {
     $scope.page = 'log-form';
 
 
-    $scope.entryChoices = [
-        {'vallue':'other', 'verbose':'----'},
-        {'value':'feed', 'verbose':'Feeding'},
-        {'value':'water', 'verbose':'Watering'},
-        {'value':'spray', 'verbose':'Spray'},
-        {'value':'humidty', 'verbose':'Humidity Change'},
-        {'vallue':'light', 'verbose':'Lighting Change'}
-    ];   
+    $scope.entryChoices = $journal.entryTypeChoices;
+   
 
+    $scope.getTimestamp = function(){
+        var now = new Date();
+        return now.toISOString();
+    }
     $scope.entry = {
-        "timestamp":new Date(),
+        "date": $scope.getTimestamp(),
+        "time": $scope.getTimestamp(),
         "entry":"",
-        "type":"other"  
+        "type":"other",
+        "id": null
     };
+
+
+    $scope.saveEntry = function(){
+        var entry = angular.copy($scope.entry);
+        if (!entry.id) {
+            entry.id = $ardyh.generateUUID();
+        } 
+        $journal.save(entry);
+        $location.path("journal");
+    }
 
 
 });

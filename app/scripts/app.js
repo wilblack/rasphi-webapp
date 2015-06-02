@@ -17,15 +17,17 @@ angular
     'ngSanitize',
     'ngTouch',
     'ardyh.services',
-    'rasphi.services',
+    'growbot.services',
+    // 'firebase-services',
     'nvd3ChartDirectives',
     'mgcrea.ngStrap',
-    'angular-carousel'
+    'angular-carousel',
+
   ])
 
 
   .constant('ardyhConf', {
-      'version':'0.05.15b',
+      'version':'0.05.17',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -45,6 +47,11 @@ angular
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl'
       })
+      .when('/journal', {
+        templateUrl: 'views/journal.html',
+        controller: 'JournalCtrl'
+      })
+
       .when('/log-form', {
         templateUrl: 'views/log-form.html',
         controller: 'LogFormCtrl'

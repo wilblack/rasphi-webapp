@@ -147,6 +147,15 @@ service.
         obj.send({'command':command, 'kwargs':kwargs});
     }
 
+    this.generateUUID = function() {
+        var d = new Date().getTime();
+        var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = (d + Math.random()*16)%16 | 0;
+            d = Math.floor(d/16);
+            return (c=='x' ? r : (r&0x3|0x8)).toString(16);
+        });
+        return uuid;
+    };
     this.init(ardyhConf.settings.botName);
 
 }])
@@ -342,6 +351,12 @@ service.
     },
     getObject: function(key) {
       return JSON.parse($window.localStorage[key] || '{}');
+    },
+    setArray: function(key, value) {
+      $window.localStorage[key] = JSON.stringify(value);
+    },
+    getArray: function(key) {
+      return JSON.parse($window.localStorage[key] || '[]');
     }
   }
 }]);
