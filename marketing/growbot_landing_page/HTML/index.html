@@ -1,142 +1,123 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>ITS BETA - Landing Page</title>
+    <title>Growbot - The indoor gardening monitoring system</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="assets/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+
     <!-- Lato Google Font - For Theme -->        
     <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
     <!-- Default Theme Style -->
-    <link href="assets/css/theme-dark.css" rel="stylesheet" media="screen">
+    <link href="assets/css/theme-light.css" rel="stylesheet" media="screen" id="skin">
     <!-- Theme Color  options - alizarin.css, belize-hole.css, carrot.css, turquoise.css, wisteria.css-->
-    <link href="assets/css/theme-turquoise.css" rel="stylesheet" media="screen">
+    <link href="assets/css/theme-turquoise.css" rel="stylesheet" media="screen" id="swatches">
+    <!-- Theme color Options Viewer - For Demo Purpose only -->    
+    <link href="assets/css/style-switcher.css" rel="stylesheet">
     <!-- Pacifico Google Font - For Demo Purpose only -->    
     <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
+
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
       <script src="assets/js/html5shiv.js"></script>
       <script src="assets/js/respond.min.js"></script>
     <![endif]-->
-    <!--Below CSS is for demo purpose only-->
-    <style type="text/css">
-	.turquoise,a.turquoise:hover{color: #1abc9c;}
-	 #features h3{ padding-bottom:20px; border-bottom: solid 1px #464b4f; margin-bottom:30px;}
-	 #showcase{ margin:40px 0 0;}
-	 .showcase-inner{text-align: center; margin-bottom:30px;}
-	 .showcase-media{ height:300px; overflow: hidden; border:solid 1px #464b4f;  border-radius: 5px; position:relative; text-align:center;}
-	 .showcase-media img{margin:0 auto;}
-	 .showcase-media a{background:#2a2f32; padding:10px; display:block; -webkit-transition:all .2s ease-in-out; -moz-transition:all .2s ease-in-out;transition:all .2s ease-in-out;}
-	 .showcase-media a:hover{ background:#464b4f; }
-	 .showcase-desc{ padding:10px; text-align: center;}
-	 @media (min-width: 1200px) {
-		 #marketing-text{margin-top:40px;}
-	 }
-	</style>
   </head>
   <body>
-    <div class="container">
-    	<div class="row">     
+  	
+   <div class="container">
+    	<div class="row">        
+			<header id="logo">
+                <div class="col-md-12 col-sm-12">
+                    <a href="#" title="its beta">Growbot</a>
+                </div><!--/12-->
+			</header>
+
             <section id="marketing-text">
                 <div class="col-md-12 col-sm-12">
-                	<h1>Awesome landing page with FlatUI colors</h1>
-                    <p>Click the below links for live preview</p>
+                	<h1>Control and Monitor your grow environment to maximize size and yield.</h1>
+                    <p>Growbot is for the indoor gardener who knows that optimimal grow conditions are key to maixmiing crop yield and prduct size. Sign up below to learn more about how the Growbot system can help you get the most out of your garden.</p>
                 </div><!--12-->
             </section><!--/marketing-text-->  
-                       
-            <section id="showcase" class="clearfix">
-                <div class="col-md-4 col-sm-4">  
-                  <div class="showcase-inner">
-                  	<div class="showcase-media">
-                    <a href="index-variation1.html"><img src="screenshots/Variation1.jpg" width="410" height="1566" alt="Variation1" class="img-responsive" /></a>
-                    </div><!--showcase-media-->    
-                    <div class="showcase-desc">
-                    <a href="index-variation1.html" class="btn btn-theme">Live Preview 1</a>
-                    </div><!--showcase-desc-->    
-                  </div><!--showcase-inner-->          		
-                </div><!--/4-->
-                
-                <div class="col-md-4 col-sm-4">  
-                  <div class="showcase-inner">
-                  	<div class="showcase-media">
-                    <a href="index-variation2.html"><img src="screenshots/Variation2.jpg" width="410" height="1169" alt="Variation2" class="img-responsive" /></a>
-                    </div><!--showcase-media-->    
-                    <div class="showcase-desc">
-                    <a href="index-variation2.html" class="btn btn-theme">Live Preview 2</a>
-                    </div><!--showcase-desc-->    
-                  </div><!--showcase-inner-->          		
-                </div><!--/4-->
-                
-                <div class="col-md-4 col-sm-4">  
-                  <div class="showcase-inner">
-                  	<div class="showcase-media">
-                    <a href="index-variation3.html"><img src="screenshots/Variation3.jpg" width="410" height="1294" alt="Variation3" class="img-responsive"/></a>
-                    </div><!--showcase-media-->    
-                    <div class="showcase-desc">
-                    <a href="index-variation3.html" class="btn btn-theme">Live Preview 3</a>
-                    </div><!--showcase-desc-->    
-                  </div><!--showcase-inner-->          		
-                </div><!--/4-->
-            </section><!--showcase-->  
+
+            <section id="subscribe" class="clearfix">
+                <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
+                     <div class="row">
+                        <form role="form" action="http://doozypixels.createsend.com/t/d/s/xky/" method="post">
+                            <div class="col-md-7 col-sm-7"><input type="email" id="fieldEmail" name="cm-xky-xky" class="form-control input-lg" placeholder="Email Address" required /></div><!--7-->
+                            <div class="col-md-5 col-sm-5 "><button class="btn btn-block btn-lg btn-theme">Tell Me More</button></div><!--5-->
+                        </form>
+                    </div><!--row-->
+                </div><!--/6-->
+            </section><!--subscribe-->  
             
-			<section id="features">
-            	<div class="col-md-12 col-sm-12"><h3 class="text-center">Theme Features</h3></div>
-                <div class="col-md-3 col-sm-6">
-                	<div class="media">
-                      <div class="pull-left">
-                        <i class="icon icon-bold"></i>   
-                      </div><!--pull-left-->
-                      <div class="media-body">
-                        <h4 class="media-heading">Bootstrap 3</h4>
-                        <p>Complete markup built using Bootstrap 3 version</p>
-                      </div><!--media-body-->
-                    </div><!--media-->
+         
+            <section id="features">
+              <div class="row">
+                <div class="col-md-4 col-sm-4">
+                    <div class="feature-box">
+                        <i class="fa fa-bell-o"></i>                            
+                        <h2>Real-time Alarms and Notifications</h2>
+                        <p>Get up to date messages when things go wrong. A dead fan? A light burns out? These are the reality of growing. The key is to be able to instantly react to such unexpected evetns. Growbot will keep on eye on things and let you know if any thing is wrong.</p>
+                    </div><!--feature-box-->
                 </div><!--/3-->
                 
-                 <div class="col-md-3 col-sm-6">
-                	<div class="media">
-                      <div class="pull-left">
-                        <i class="icon icon-copy"></i>
-                      </div><!--pull-left-->
-                      <div class="media-body">
-                        <h4 class="media-heading">Three Templates</h4>
-                        <p>Templates with Dark &amp; Light color themes and five color swatches</p>
-                      </div><!--media-body-->
-                    </div><!--media-->
+                <div class="col-md-4 col-sm-4">
+                    <div class="feature-box">
+                        <i class="fa fa-line-chart"></i>                            
+                        <h2>Analytics to help you grow smarter</h2>
+                        <p>Growbot keeps track of things like temperature and growth rate over time and can use this to correleate with things like envorinmental changes or feed cycle changes. </p>
+                    </div><!--feature-box-->
                 </div><!--/3-->
                 
-                <div class="col-md-3 col-sm-6">
-                	<div class="media">
-                      <div class="pull-left">
-                        <i class="hicon icon-envelope"></i> 
-                      </div><!--pull-left-->
-                      <div class="media-body">
-                        <h4 class="media-heading">Subscribe Signup Forms</h4>
-                        <p>Theme supports three different forms <b class="turquoise">Mail Chimp</b> &amp; <b class="turquoise">Campaign Monitor</b></p>
-                      </div><!--media-body-->
-                    </div><!--media-->
+                <div class="col-md-4 col-sm-4">
+                    <div class="feature-box">
+                        <i class="fa fa-list-alt"></i>                            
+                        <h2>Gardening Journal</h2>
+                        <p>Keep track of events liking feeding, lights changes, spraying. Growbot will organize and visulaize these events in your grow history.</p>
+                    </div><!--feature-box-->
                 </div><!--/3-->
-                
-                <div class="col-md-3 col-sm-6">
-                	<div class="media">
-                      <div class="pull-left">
-                        <i class="hicon icon-cog"></i> 
-                      </div><!--pull-left-->
-                      <div class="media-body">
-                        <h4 class="media-heading">Documentation</h4>
-                        <p>Check the <a href="subscribe-form-docs.html" class="turquoise">documentation</a> for Signup form settings</p>
-                      </div><!--media-body-->
-                    </div><!--media-->
-                </div><!--/3-->
+                </div>
+                <div class="row">
+                    <div class="col-md-4 col-sm-4">
+                        <div class="feature-box">
+                            <i class="fa fa-camera-retro"></i>                            
+                            <h2>Video History</h2>
+                            <p>Watch months worth of growing in minutes. Growbots automatically creates movies uses the time lapse phots. Video also show your events and the environmental variables.</p>
+                        </div><!--feature-box-->
+                    </div><!--/3-->
+
+                    <div class="col-md-4 col-sm-4">
+                        <div class="feature-box">
+                            <i class="fa fa-tachometer"></i>                            
+                            <h2>Weekly Metrics and Targets</h2>
+                            <p>Growbot can you fine tune your grow environment and see how if changes week to week.</p>
+                        </div><!--feature-box-->
+                    </div><!--/3-->
+
+                    <div class="col-md-4 col-sm-4">
+                        <div class="feature-box">
+                            <i class="fa fa-wrench"></i>                            
+                            <h2>Customizable and Scalable</h2>
+                            <p>Build using off the shelf hardware like the Raspberry Pi, Growbot can be customized and tailered to fit whatever unqiue set-up you may have.</p>
+                        </div><!--feature-box-->
+                    </div><!--/3-->
+                </div>
             </section><!--features-->
-            
+
 			<footer>            
-                <div class="col-md-12 col-sm-12">                	
-                    <small><i>&copy;2013 Its Beta. All rights reserved.</i></small>
+                <div class="col-md-12 col-sm-12">
+                	<p class="social-text">
+                        <span></span>
+                        <i>For more details leading up to our launch <br/>leave us your email.</i>
+                    </p>
+
+                    <small><i>&copy;2015 Growbot. All rights reserved.</i></small>
                 </div><!--/12-->
             </footer>
 
@@ -147,19 +128,10 @@
     <script src="assets/js/jquery.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="assets/js/bootstrap.min.js"></script>
-    
-    <script src="screenshots/jquery.hoverIntent.minified.js"></script>
-    <script type="text/javascript">
-	$(function(){
-		var scrolled=0,
-		    $parH = $('.showcase-media'),
-			$parAnchor = $parH.find('a');
-			$imgH = $parAnchor.children().height();
-
-		$parAnchor.hoverIntent(makeTall, makeShort);
-	    function makeTall(){$(this).parent().animate({ scrollTop: $imgH }, 6000);}
-        function makeShort(){$(this).parent().animate({ scrollTop: 0 }, 200);}
-		});
-	</script>
+    <!-- Below script is for demo purpose only -->
+    <script src="assets/js/style-switcher.js"></script>
+    <!-- IE Input Placeholder Fix -->	
+    <script src="assets/js/jquery.placeholder.js"></script>
+    <script type="text/javascript">$(function(){$('input, textarea').placeholder();});</script>
   </body>
 </html>
