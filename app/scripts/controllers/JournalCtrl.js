@@ -1,7 +1,7 @@
 var app = angular.module("rasphiWebappApp");
 app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user, ardyhConf) {
     $scope.page = 'journal';
-
+    $scope.ardyhConf = ardyhConf;
     $scope.journal = $journal;
 
     $scope.type2color = function(type){

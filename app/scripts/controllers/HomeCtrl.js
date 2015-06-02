@@ -62,12 +62,12 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
         
     });
 
-    // $images.fetchList()
-    // .then(function(data, status){
-    //     $scope.images = data.slice(-10).reverse();
-    // }, function(data, status){
-
-    // });
+    $images.fetchList()
+    .then(function(data, status){
+        $scope.images = data.slice(-12).reverse();
+    }, function(data, status){
+        
+    });
 
 
 
