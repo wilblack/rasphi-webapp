@@ -30,7 +30,7 @@ angular
 
   .constant('ardyhConf', {
       'firebaseName': 'rasphi',
-      'version':'0.06.02',
+      'version':'0.06.02b',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',

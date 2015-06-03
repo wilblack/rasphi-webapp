@@ -10,9 +10,12 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
         var now = new Date();
         return now.toISOString();
     }
+
     $scope.entry = {
-        "date": $scope.getTimestamp(),
-        "time": $scope.getTimestamp(),
+        "date": new Date(),
+        "time": new Date(),
+        // "date": $scope.getTimestamp(),
+        // "time": $scope.getTimestamp(),
         "entry":"",
         "type":"other",
         "id": null
@@ -20,13 +23,15 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
 
 
     $scope.saveEntry = function(){
-        var entry = angular.copy($scope.entry);
+        var entry = $scope.entry;
         if (!entry.id) {
             entry.id = $ardyh.generateUUID();
-        } 
+        }
+
+        entry.date = entry.date.toISOString();
+        entry.time = entry.time.toISOString();
         $journal.save(entry);
         $location.path("journal");
     }
-
 
 });

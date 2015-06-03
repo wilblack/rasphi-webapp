@@ -53,5 +53,6 @@ service.service( '$firebaseApi', ['$rootScope',
     var obj = this;
     this.name = 'journal'
     this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
-    this.data = $firebaseArray(this.ref.orderByChild('date'));
+    //this.data = $firebaseArray(this.ref.orderByChild('date'));
+    this.data = $firebaseArray(this.ref);
 }])
