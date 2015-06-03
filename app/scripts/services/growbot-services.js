@@ -57,6 +57,11 @@ service.service('$user', function( $localStorage){
 
 
     obj.save = function(entry){
+
+        var timestampStr = entry.date.split("T")[0] + "T" + entry.time.split("T")[1];
+        entry.timestamp = Date.parse(timestampStr).getTime();
+        entry.timestamp_reverse = -entry.timestamp;
+        console.log(entry)
         obj.entries.$add(entry);
         
         //$localStorage.setArray('entries', obj.entries);

@@ -13,10 +13,25 @@
             </div>
 
             <div class="media-body">
-                <h4>{{entry.date | date:'mediumDate'}} {{entry.time | date:'mediumTime'}}</h4>
+                <h4>
+                    {{entry.date | date:'mediumDate'}} {{entry.time | date:'mediumTime'}}
+                    <span class="right">
+                    <button ng-click="enditEntry(entry);" class="btn btn-default">
+                        <i class="glyphicon glyphicon-pencil"></i>
+                    </button>
+                    &nbsp;
+                    <button ng-click="deleteEntry(entry);" class="btn btn-danger">
+                        <i class="glyphicon glyphicon-remove-sign"></i>
+                    </button>
 
+                    </span>
+
+                </h4>
+
+                <small>{{entry.timestamp_reverse}}</small>
                 <p>{{entry.entry}}</p>
             </div>
+        <hr/>
         </div>
 
 
