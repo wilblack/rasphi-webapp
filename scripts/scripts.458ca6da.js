@@ -30,7 +30,7 @@ angular
 
   .constant('ardyhConf', {
       'firebaseName': 'rasphi',
-      'version':'0.06.02',
+      'version':'0.06.02b',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -163,9 +163,12 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
         var now = new Date();
         return now.toISOString();
     }
+
     $scope.entry = {
-        "date": $scope.getTimestamp(),
-        "time": $scope.getTimestamp(),
+        "date": new Date(),
+        "time": new Date(),
+        // "date": $scope.getTimestamp(),
+        // "time": $scope.getTimestamp(),
         "entry":"",
         "type":"other",
         "id": null
@@ -173,14 +176,16 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
 
 
     $scope.saveEntry = function(){
-        var entry = angular.copy($scope.entry);
+        var entry = $scope.entry;
         if (!entry.id) {
             entry.id = $ardyh.generateUUID();
-        } 
+        }
+
+        entry.date = entry.date.toISOString();
+        entry.time = entry.time.toISOString();
         $journal.save(entry);
         $location.path("journal");
     }
-
 
 });
 var app = angular.module("rasphiWebappApp");
@@ -683,7 +688,8 @@ service.service( '$firebaseApi', ['$rootScope',
     var obj = this;
     this.name = 'journal'
     this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
-    this.data = $firebaseArray(this.ref.orderByChild('date'));
+    //this.data = $firebaseArray(this.ref.orderByChild('date'));
+    this.data = $firebaseArray(this.ref);
 }])
 'user strict';
 
