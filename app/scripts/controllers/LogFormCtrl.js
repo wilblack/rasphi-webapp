@@ -1,8 +1,7 @@
 var app = angular.module("rasphiWebappApp");
-app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location) {
+app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location, $routeParams) {
     $scope.page = 'log-form';
-
-
+    $scope.entryId = $routeParams.entryId || null;
     $scope.entryChoices = $journal.entryTypeChoices;
    
 
@@ -11,23 +10,21 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
         return now.toISOString();
     }
 
-    $scope.entry = {
-        "date": new Date(),
-        "time": new Date(),
-        // "date": $scope.getTimestamp(),
-        // "time": $scope.getTimestamp(),
-        "entry":"",
-        "type":"other",
-        "id": null
-    };
-
+    if ($scope.entryId) {
+        $scope.entry = $journal.getEntryById($scope.entryId);
+        $scope.entry.date = Date.parse($scope.entry.date);
+        $scope.entry.time = Date.parse($scope.entry.time);
+    } else {
+        $scope.entry = {
+            "date": new Date(),
+            "time": new Date(),
+            "entry":"",
+            "type":"other",
+        };
+    }
 
     $scope.saveEntry = function(){
         var entry = $scope.entry;
-        if (!entry.id) {
-            entry.id = $ardyh.generateUUID();
-        }
-
         entry.date = entry.date.toISOString();
         entry.time = entry.time.toISOString();
         $journal.save(entry);

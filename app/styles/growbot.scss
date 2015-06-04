@@ -15,6 +15,14 @@ $tertiary-dark: #354F00;
     float:right;
 }
 
+.center-text {
+    text-align: center;
+}
+
+.margin-bottom {
+    margin-bottom: 2em;
+}
+
 .red {
     color:#FF0000;
 }
@@ -79,4 +87,15 @@ div[rn-carousel-indicators] {
         }
     }
     
+}
+
+.list-group-item.active {
+    background-color: #EEE;
+    border-color: #DDD;
+
+    &:hover {
+        background-color: #EEE;
+        border-color: #DDD;
+    }
+
 }

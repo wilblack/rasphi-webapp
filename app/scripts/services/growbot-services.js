@@ -31,7 +31,7 @@ service.service('$user', function( $localStorage){
     obj.entries = $fbJournal.data;
 
     obj.entryTypeChoices = [
-        {'value':'other', 'verbose':null, 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
+        {'value':'other', 'verbose':"Info", 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
         {'value':'feed', 'verbose':'Feeding', 'color':'#00FF00', 'icon':'glyphicon glyphicon-leaf'},
         {'value':'water', 'verbose':'Watering', 'color':'#0000FF', 'icon':'glyphicon glyphicon-tint'},
         {'value':'spray', 'verbose':'Spray', 'color':'#0077FF', 'icon':'glyphicon glyphicon-certificate'},
@@ -55,14 +55,22 @@ service.service('$user', function( $localStorage){
         return out.icon;
     };
 
+    obj.getEntryById = function(entryId){
+        return obj.entries.$getRecord(entryId);
+    }
 
     obj.save = function(entry){
-
         var timestampStr = entry.date.split("T")[0] + "T" + entry.time.split("T")[1];
         entry.timestamp = Date.parse(timestampStr).getTime();
         entry.timestamp_reverse = -entry.timestamp;
         console.log(entry)
-        obj.entries.$add(entry);
+        if (entry.$id) {
+            obj.entries.$save(entry);
+        } else {
+            obj.entries.$add(entry);
+        }
+
+
         
         //$localStorage.setArray('entries', obj.entries);
     }

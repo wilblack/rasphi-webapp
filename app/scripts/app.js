@@ -30,7 +30,7 @@ angular
 
   .constant('ardyhConf', {
       'firebaseName': 'rasphi',
-      'version':'0.06.02b',
+      'version':'0.06.03',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -59,6 +59,11 @@ angular
         templateUrl: 'views/log-form.html',
         controller: 'LogFormCtrl'
       })
+      .when('/log-form/:entryId', {
+        templateUrl: 'views/log-form.html',
+        controller: 'LogFormCtrl'
+      })
+
       .when('/settings', {
         templateUrl: 'views/settings.html',
         controller: 'SettingsCtrl'
