@@ -8596,67 +8596,93 @@ body {
     border-bottom: 0;
   }
 }
-/* line 15, ../../app/styles/growbot.scss */
+/* line 14, ../../app/styles/growbot.scss */
+.right {
+  float: right;
+}
+
+/* line 18, ../../app/styles/growbot.scss */
+.center-text {
+  text-align: center;
+}
+
+/* line 22, ../../app/styles/growbot.scss */
+.margin-bottom {
+  margin-bottom: 2em;
+}
+
+/* line 26, ../../app/styles/growbot.scss */
 .red {
   color: #FF0000;
 }
 
-/* line 19, ../../app/styles/growbot.scss */
+/* line 30, ../../app/styles/growbot.scss */
 .blue {
   color: #0000FF;
 }
 
-/* line 23, ../../app/styles/growbot.scss */
+/* line 34, ../../app/styles/growbot.scss */
 .green {
   color: #408E2F;
 }
 
-/* line 27, ../../app/styles/growbot.scss */
+/* line 38, ../../app/styles/growbot.scss */
 .large-stat {
   font-size: 2em;
   color: #7B9F35;
 }
 
-/* line 34, ../../app/styles/growbot.scss */
+/* line 45, ../../app/styles/growbot.scss */
 .bot-panel .panel-heading {
   background-color: #D4EE9F;
 }
 
-/* line 42, ../../app/styles/growbot.scss */
+/* line 53, ../../app/styles/growbot.scss */
 .change-directions {
   display: inline-block;
 }
 
-/* line 47, ../../app/styles/growbot.scss */
+/* line 58, ../../app/styles/growbot.scss */
 ul[rn-carousel] {
   width: 400px;
   height: 280px;
   margin: 0 auto;
 }
-/* line 52, ../../app/styles/growbot.scss */
+/* line 63, ../../app/styles/growbot.scss */
 ul[rn-carousel] img {
   width: 400px;
 }
 
-/* line 57, ../../app/styles/growbot.scss */
+/* line 68, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] {
   text-align: center;
 }
-/* line 60, ../../app/styles/growbot.scss */
+/* line 71, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] span {
   color: #9AD58E;
   font-size: 1.5em;
 }
-/* line 65, ../../app/styles/growbot.scss */
+/* line 76, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] span.active {
   color: #354F00;
 }
 
-/* line 72, ../../app/styles/growbot.scss */
+/* line 83, ../../app/styles/growbot.scss */
 .journal .media-left {
   vertical-align: middle;
 }
-/* line 74, ../../app/styles/growbot.scss */
+/* line 85, ../../app/styles/growbot.scss */
 .journal .media-left i.journal-type {
   font-size: 2.5em;
+}
+
+/* line 92, ../../app/styles/growbot.scss */
+.list-group-item.active {
+  background-color: #EEE;
+  border-color: #DDD;
+}
+/* line 96, ../../app/styles/growbot.scss */
+.list-group-item.active:hover {
+  background-color: #EEE;
+  border-color: #DDD;
 }

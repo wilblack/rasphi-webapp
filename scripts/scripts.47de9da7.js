@@ -30,7 +30,7 @@ angular
 
   .constant('ardyhConf', {
       'firebaseName': 'rasphi',
-      'version':'0.06.02b',
+      'version':'0.06.03',
       'DATETIME_FORMAT': 'hh:mm:ss tt, ddd MMM dd, yyyy',
       'settings' : {
           'domain': '162.243.146.219:9093',
@@ -59,6 +59,11 @@ angular
         templateUrl: 'views/log-form.html',
         controller: 'LogFormCtrl'
       })
+      .when('/log-form/:entryId', {
+        templateUrl: 'views/log-form.html',
+        controller: 'LogFormCtrl'
+      })
+
       .when('/settings', {
         templateUrl: 'views/settings.html',
         controller: 'SettingsCtrl'
@@ -152,10 +157,9 @@ angular.module('rasphiWebappApp')
 
 })
 var app = angular.module("rasphiWebappApp");
-app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location) {
+app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, $ardyh, $user, $location, $routeParams) {
     $scope.page = 'log-form';
-
-
+    $scope.entryId = $routeParams.entryId || null;
     $scope.entryChoices = $journal.entryTypeChoices;
    
 
@@ -164,23 +168,21 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
         return now.toISOString();
     }
 
-    $scope.entry = {
-        "date": new Date(),
-        "time": new Date(),
-        // "date": $scope.getTimestamp(),
-        // "time": $scope.getTimestamp(),
-        "entry":"",
-        "type":"other",
-        "id": null
-    };
-
+    if ($scope.entryId) {
+        $scope.entry = $journal.getEntryById($scope.entryId);
+        $scope.entry.date = Date.parse($scope.entry.date);
+        $scope.entry.time = Date.parse($scope.entry.time);
+    } else {
+        $scope.entry = {
+            "date": new Date(),
+            "time": new Date(),
+            "entry":"",
+            "type":"other",
+        };
+    }
 
     $scope.saveEntry = function(){
         var entry = $scope.entry;
-        if (!entry.id) {
-            entry.id = $ardyh.generateUUID();
-        }
-
         entry.date = entry.date.toISOString();
         entry.time = entry.time.toISOString();
         $journal.save(entry);
@@ -189,10 +191,43 @@ app.controller("LogFormCtrl", function($rootScope, $scope, $journal, ardyhConf, 
 
 });
 var app = angular.module("rasphiWebappApp");
-app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user) {
+app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, $user, $modal) {
     $scope.page = 'journal';
     $scope.ardyhConf = ardyhConf;
     $scope.journal = $journal;
+    $scope.delete = {};
+
+    $scope.filters = [];
+
+    var deleteModal = $modal({
+        template: "views/partials/delete-modal.html",
+        title:'Are you sure you want to delete this entry?',
+        content: 'This cannot be undone.',
+        show: false,
+        backdrop:'static',
+        scope:$scope
+    });
+
+    $scope.toggleFilters = function(value){
+        var newFilters = [].concat($scope.filters);
+
+        var index = _.indexOf($scope.filters, value);
+        if (index > -1){
+            newFilters.splice(index, 1);
+        } else {
+            newFilters.push(value);
+        }
+        $scope.filters = newFilters;
+    }
+
+    $scope.typeFilter = function(element){
+        if ($scope.filters.length === 0) {
+            return true;
+        } else {
+            return (_.indexOf($scope.filters, element.type) > -1);
+        }
+        
+    }
 
     $scope.type2color = function(type){
         var color = $journal.type2color(type);
@@ -202,7 +237,18 @@ app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, 
     $scope.type2icon = function(type){
         var icon = $journal.type2icon(type);
         return icon;
-        
+    };
+
+    $scope.showDeleteModal = function(entry){
+        $scope.delete.entry = entry;
+        deleteModal.show();
+    }
+
+    $scope.deleteEntry = function(entry) {
+        $journal.entries.$remove($scope.delete.entry)
+        .then(function(ref){
+            $scope.delete = {};
+        });
     };
 
 });
@@ -601,7 +647,7 @@ service.service('$user', function( $localStorage){
     obj.entries = $fbJournal.data;
 
     obj.entryTypeChoices = [
-        {'value':'other', 'verbose':null, 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
+        {'value':'other', 'verbose':"Info", 'color':'#333333', 'icon':'glyphicon glyphicon-info-sign'},
         {'value':'feed', 'verbose':'Feeding', 'color':'#00FF00', 'icon':'glyphicon glyphicon-leaf'},
         {'value':'water', 'verbose':'Watering', 'color':'#0000FF', 'icon':'glyphicon glyphicon-tint'},
         {'value':'spray', 'verbose':'Spray', 'color':'#0077FF', 'icon':'glyphicon glyphicon-certificate'},
@@ -625,9 +671,22 @@ service.service('$user', function( $localStorage){
         return out.icon;
     };
 
+    obj.getEntryById = function(entryId){
+        return obj.entries.$getRecord(entryId);
+    }
 
     obj.save = function(entry){
-        obj.entries.$add(entry);
+        var timestampStr = entry.date.split("T")[0] + "T" + entry.time.split("T")[1];
+        entry.timestamp = Date.parse(timestampStr).getTime();
+        entry.timestamp_reverse = -entry.timestamp;
+        console.log(entry)
+        if (entry.$id) {
+            obj.entries.$save(entry);
+        } else {
+            obj.entries.$add(entry);
+        }
+
+
         
         //$localStorage.setArray('entries', obj.entries);
     }
@@ -688,8 +747,8 @@ service.service( '$firebaseApi', ['$rootScope',
     var obj = this;
     this.name = 'journal'
     this.ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com/" + obj.name);
-    //this.data = $firebaseArray(this.ref.orderByChild('date'));
-    this.data = $firebaseArray(this.ref);
+    this.data = $firebaseArray(this.ref.orderByChild('timestamp_reverse'));
+    //this.data = $firebaseArray(this.ref);
 }])
 'user strict';
 
