@@ -1,27 +1,41 @@
 <ng-include src="'views/partials/header.html'"></ng-include>
 
 <div class="row">
-    <div class="col col-sm-3 col-xs-3">
+    <div class="col col-sm-3 col-xs-12">
         <div class="center-text margin-bottom">
-            <a href="#/log-form" ><i class="glyphicon glyphicon-plus-sign"></i> New Entry</a>
+            <a href="#/log-form" ><i class="glyphicon glyphicon-plus-sign journal-type"></i><span class="journal-type"> New Entry</span></a>
         </div>
-        <div class="list-group">
 
+        <!-- JOURNAL TYPE FILTERS -->
+        <div class="list-group hidden-xs">
           <a ng-repeat="type in journal.entryTypeChoices" 
              ng-click="toggleFilters(type.value);" 
              class="list-group-item" 
              ng-style="type2color(type.value);"
-             ng-class="{'active':filters.indexOf(type.value) > -1}"
+             ng-class="{'my-well':filters.indexOf(type.value) > -1}"
              >
 
-            <i class="{{type2icon(type.value)}} journal-type" ></i> {{type.verbose}}
+            <i class="{{type2icon(type.value)}} journal-type" ></i>
+            <span class="journal-type"> {{type.verbose}}</span>
           </a>
-
         </div>
+
+        <div class="btn-group btn-group-justified xs-center-text visible-xs-block">
+          <a ng-repeat="type in journal.entryTypeChoices" 
+             ng-click="toggleFilters(type.value);" 
+             class="btn" 
+             ng-style="type2color(type.value);"
+             ng-class="{'my-well':filters.indexOf(type.value) > -1}"
+             >
+
+            <i class="{{type2icon(type.value)}} journal-type" ></i>
+          </a>
+        </div>
+        <!-- END JOURNAL TYPE FILTERS -->
 
     </div>
 
-    <div class="col col-sm-9 col-xs-9">
+    <div class="col col-sm-9 col-xs-12">
         <div ng-show="journal.length === 0">You have no journal entries.</div>
         <div class="media journal" ng-repeat="entry in journal.entries  | filter:typeFilter">
             <div class="media-left">
@@ -30,15 +44,14 @@
             <div class="media-body">
                 <h4>
                     {{entry.date | date:'mediumDate'}} {{entry.time | date:'mediumTime'}}
-                    <span class="right">
-                        <a href="#/log-form/{{entry.$id}}" class="btn btn-default">
-                            <i class="glyphicon glyphicon-pencil"></i>
-                        </a>
-                        &nbsp;
-                        <button ng-click="showDeleteModal(entry);" class="btn btn-danger">
-                            <i class="glyphicon glyphicon-remove-sign"></i>
-                        </button>
-                    </span>
+                    &nbsp;
+                    <a href="#/log-form/{{entry.$id}}" class="">
+                        <i class="glyphicon glyphicon-pencil text-muted"></i>
+                    </a>
+                        
+                    <a class="right xs-right" ng-click="showDeleteModal(entry);" class="">
+                        <i class="glyphicon glyphicon-remove-sign text-muted"></i>
+                    </a>
                 </h4>
                 <p>{{entry.entry}}</p>
             </div>
