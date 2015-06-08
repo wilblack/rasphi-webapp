@@ -8698,15 +8698,23 @@ span.journal-type {
 }
 
 /************************
+BOT Graphs
+*************************/
+/* line 118, ../../app/styles/growbot.scss */
+.y2 .tick {
+  opacity: 0 !important;
+}
+
+/************************
 Navbar Stuff
 *************************/
-/* line 116, ../../app/styles/growbot.scss */
+/* line 125, ../../app/styles/growbot.scss */
 .navbar {
   background-color: #D4EE9F;
   color: #0C4700;
 }
 
-/* line 122, ../../app/styles/growbot.scss */
+/* line 131, ../../app/styles/growbot.scss */
 .my-well {
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
@@ -8715,33 +8723,33 @@ Navbar Stuff
 }
 
 @media (max-width: 768px) {
-  /* line 131, ../../app/styles/growbot.scss */
+  /* line 140, ../../app/styles/growbot.scss */
   body {
     padding-top: 0;
   }
 
-  /* line 134, ../../app/styles/growbot.scss */
+  /* line 143, ../../app/styles/growbot.scss */
   .navbar-header:before, .navbar-header:after {
     display: none;
   }
 
-  /* line 138, ../../app/styles/growbot.scss */
+  /* line 147, ../../app/styles/growbot.scss */
   .container, .container-fluid {
     padding-left: 0;
     padding-right: 0;
   }
 
-  /* line 142, ../../app/styles/growbot.scss */
+  /* line 151, ../../app/styles/growbot.scss */
   .xs-center-text {
     text-align: center;
   }
 
-  /* line 145, ../../app/styles/growbot.scss */
+  /* line 154, ../../app/styles/growbot.scss */
   .right {
     float: none;
   }
 
-  /* line 148, ../../app/styles/growbot.scss */
+  /* line 157, ../../app/styles/growbot.scss */
   .xs-right {
     float: right;
   }
