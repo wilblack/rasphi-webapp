@@ -8,9 +8,10 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
     <link rel="stylesheet" href="bower_components/angular-carousel/dist/angular-carousel.css" />
+    <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
     <!-- endbower -->
+    <link rel="stylesheet" href="styles/vendor/nv.d3.min.css">
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
@@ -66,12 +67,12 @@
     <script src="bower_components/apigee-sdk/apigee.js"></script>
     <script src="bower_components/apigee-sdk/apigee.min.js"></script>
     <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/nvd3/nv.d3.js"></script>
-    <script src="bower_components/angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js"></script>
     <script src="bower_components/angular-strap/dist/angular-strap.js"></script>
     <script src="bower_components/angular-strap/dist/angular-strap.tpl.js"></script>
     <script src="bower_components/angular-carousel/dist/angular-carousel.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/nvd3/nv.d3.js"></script>
+    <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -87,8 +88,10 @@
         <script src="scripts/services/firebase-services.js"></script>
 
         <script src="scripts/directives/graphs.js"></script>
-
+        <script src="scripts/vendor/nv.d3.min.js"></script>
+       
         <!-- endbuild -->
+
 
         <!-- Firebase and AngularFire -->
         <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>

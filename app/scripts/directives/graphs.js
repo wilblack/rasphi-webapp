@@ -9,7 +9,7 @@ angular.module('rasphiWebappApp')
         link: function(scope, elem, attrs){
             var emptyGraphs = {
                 'temp':[{
-                    'key':'Temp (C)',
+                    'key':'Temp (&deg;F)',
                     'values': []
                 }],
                 'humidity':[{
@@ -22,8 +22,63 @@ angular.module('rasphiWebappApp')
                 }]
             };
 
-            scope.graphs = emptyGraphs;
+            var emptyMultiChart = [
+                {
+                    'key':'Temp (F)',
+                    'type': 'line',
+                    'yAxis':1,
+                    'values': []
+                },
+                {
+                    'key':'Humidity',
+                    'type': 'line',
+                    'yAxis':1,
+                    'values': []
+                },
+                {
+                    'key':'Light',
+                    'type':'area',
+                    'yAxis':2,
+                    'values': []
+                }
+            ];
 
+            scope.multiChartOptions = {
+                chart: {
+                    type: 'multiChart',
+                    height: 350,
+                    margin : {
+                        top: 30,
+                        right: 60,
+                        bottom: 50,
+                        left: 70
+                    },
+                    color: d3.scale.category10().range(),
+                    //useInteractiveGuideline: true,
+                    transitionDuration: 500,
+                    xAxis: {
+                        tickFormat: function(d){
+
+                            return scope.xAxisTickFormatFunction()(d);
+                        }
+                    },
+                    yAxis1: {
+                        tickFormat: function(d){
+                            return d3.format(',.1f')(d);
+                        }
+                    },
+                    yDomain1: [0, 100],
+                    yAxis2: {
+                        tickFormat: function(d){
+                            return d3.format(',.1f')(d);
+                        }
+                    }
+                }
+            };
+
+
+            scope.graphs = emptyGraphs;
+            scope.multiChart = emptyMultiChart;
             //Grab archived data
 
 
@@ -36,8 +91,6 @@ angular.module('rasphiWebappApp')
             // });
 
             scope.tempColor = function(){
-                
-
                 return function(d, i) {
                     var color = "#408E2F";
                     return color;
@@ -52,7 +105,6 @@ angular.module('rasphiWebappApp')
             };
 
             scope.timeFilterCallback = function(value) {
-                
                 scope.timestampFilter = value;
                 var now = new Date();
                 var days = value.split("-")[1];
@@ -67,12 +119,31 @@ angular.module('rasphiWebappApp')
                     console.log("successly fetch sensorValues: ", $sensorValues.graphs.temp[0].values.length);
                     scope.graphs = emptyGraphs;
                     scope.graphs = $sensorValues.graphs;
+                    
+                    scope.multiChart[0].values = [];
+                    scope.multiChart[1].values = [];
+                    scope.multiChart[2].values = [];
+                    
+                    _.each($sensorValues.graphs.temp[0].values, function(val){
+                        if (val[1] !== null) {
+                            var y = parseFloat(val[1], 10);
+                            if (isNaN(y)) console.log("NaN",val)
+                            scope.multiChart[0].values.push({x:val[0], y:val[1]});
+                        }
+                    })
+                    _.each($sensorValues.graphs.humidity[0].values, function(val){
+                        if (val[1] !== null) scope.multiChart[1].values.push({x:val[0], y:val[1]});
+                    })
+                    _.each($sensorValues.graphs.light[0].values, function(val){
+                        if (val[1] !== null) scope.multiChart[2].values.push({x:val[0], y:val[1]});
+                    })
+                    // scope.MultiGraphs[2].value = scope.graphs.light.values;
                 },function(data, status) {
                     console.log("failed to fetch sensorValues");
                 });
             };
 
-            scope.timeFilterCallback('last-1-days');
+            scope.timeFilterCallback('last-3-days');
         }   
     };
 })

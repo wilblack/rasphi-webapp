@@ -48,10 +48,11 @@
             <section id="subscribe" class="clearfix">
                 <div class="col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2">
                      <div class="row">
-                        <form role="form" action="http://doozypixels.createsend.com/t/d/s/xky/" method="post">
+                        <form role="form" action="emailCallback();">
                             <strong>Sign up below to learn more about how the Growbot system can help you get the most out of your garden.</strong>
-                            <div class="col-md-7 col-sm-7"><input type="email" id="fieldEmail" name="cm-xky-xky" class="form-control input-lg" placeholder="Email Address" required /></div><!--7-->
+                            <div class="col-md-7 col-sm-7"><input type="email" id="email" class="form-control input-lg" placeholder="Email Address" required /></div><!--7-->
                             <div class="col-md-5 col-sm-5 "><button class="btn btn-block btn-lg btn-theme">Tell Me More</button></div><!--5-->
+                            <div id="msg"></div>
                         </form>
                     </div><!--row-->
                 </div><!--/6-->
@@ -134,5 +135,33 @@
     <!-- IE Input Placeholder Fix -->	
     <script src="assets/js/jquery.placeholder.js"></script>
     <script type="text/javascript">$(function(){$('input, textarea').placeholder();});</script>
+    <script src="https://cdn.firebase.com/js/client/2.2.6/firebase.js"></script>
+    <script>
+    $("document").ready(function(){
+        var ref = new Firebase("https://rasphi.firebaseio.com/");
+
+        $("form").submit(function(e){
+            e.preventDefault();
+            var email = $("#email").val();
+
+            var emailsRef = ref.child("emails");
+            var data = {
+                email:email,
+                'signup_date':(new Date()).toISOString()
+            };
+            emailsRef.push(data, function(error){
+                if (error){
+                    console.log("You suck")
+                } else {
+                    $("#email").val("");
+                    $("#msg").text("Thank you for signing up. Please check your inbox for our email.");
+                }
+            })
+        });
+    });
+
+
+
+    </script>
   </body>
 </html>
