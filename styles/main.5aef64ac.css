@@ -8632,89 +8632,158 @@ body {
   color: #7B9F35;
 }
 
-/* line 46, ../../app/styles/growbot.scss */
-.bot-panel .panel-heading {
-  background-color: #D4EE9F;
-}
-
-/* line 54, ../../app/styles/growbot.scss */
+/* line 45, ../../app/styles/growbot.scss */
 .change-directions {
   display: inline-block;
 }
 
-/* line 59, ../../app/styles/growbot.scss */
+/* line 50, ../../app/styles/growbot.scss */
 ul[rn-carousel] {
   max-width: 400px;
   height: 280px;
   margin: 0 auto;
 }
-/* line 64, ../../app/styles/growbot.scss */
+/* line 55, ../../app/styles/growbot.scss */
 ul[rn-carousel] img {
   width: 400px;
 }
 
-/* line 69, ../../app/styles/growbot.scss */
+/* line 60, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] {
   text-align: center;
 }
-/* line 72, ../../app/styles/growbot.scss */
+/* line 63, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] span {
   color: #9AD58E;
   font-size: 1.5em;
 }
-/* line 77, ../../app/styles/growbot.scss */
+/* line 68, ../../app/styles/growbot.scss */
 div[rn-carousel-indicators] span.active {
   color: #354F00;
 }
 
-/* line 84, ../../app/styles/growbot.scss */
+/* line 75, ../../app/styles/growbot.scss */
 .journal .media-left {
   vertical-align: middle;
 }
-/* line 86, ../../app/styles/growbot.scss */
+/* line 77, ../../app/styles/growbot.scss */
 .journal .media-left i.journal-type {
   font-size: 2.5em;
 }
 
-/* line 93, ../../app/styles/growbot.scss */
+/* line 84, ../../app/styles/growbot.scss */
 .journal-type {
   font-size: 2em;
 }
 
-/* line 97, ../../app/styles/growbot.scss */
+/* line 88, ../../app/styles/growbot.scss */
 span.journal-type {
   font-size: 1.5em;
 }
 
-/* line 101, ../../app/styles/growbot.scss */
+/* line 92, ../../app/styles/growbot.scss */
 .list-group-item.active {
   background-color: #EEE;
   border-color: #DDD;
 }
-/* line 105, ../../app/styles/growbot.scss */
+/* line 96, ../../app/styles/growbot.scss */
 .list-group-item.active:hover {
   background-color: #EEE;
   border-color: #DDD;
 }
 
 /************************
+Splash Screen
+*************************/
+/* line 109, ../../app/styles/growbot.scss */
+[ng-cloak].splash-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: block !important;
+  width: 100%;
+  height: 100%;
+  background-color: #354F00;
+}
+/* line 118, ../../app/styles/growbot.scss */
+[ng-cloak].splash-screen h3 {
+  height: 100%;
+}
+
+/* line 123, ../../app/styles/growbot.scss */
+.splash-screen {
+  display: none;
+}
+
+/*******************************
+Bot Panels
+*********************************/
+/* line 131, ../../app/styles/growbot.scss */
+.large-stat {
+  font-size: 2em;
+  color: #354F00;
+}
+
+/* line 136, ../../app/styles/growbot.scss */
+.flex-container {
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: row;
+  flex-direction: row;
+}
+/* line 140, ../../app/styles/growbot.scss */
+.flex-container button {
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+}
+/* line 143, ../../app/styles/growbot.scss */
+.flex-container button:first-child {
+  margin-right: 3px;
+}
+/* line 146, ../../app/styles/growbot.scss */
+.flex-container button:last-child {
+  margin-left: 3px;
+}
+
+/* line 154, ../../app/styles/growbot.scss */
+.bot-panel .panel-heading {
+  background-color: #9AD58E;
+}
+/* line 156, ../../app/styles/growbot.scss */
+.bot-panel .panel-heading h1, .bot-panel .panel-heading h2, .bot-panel .panel-heading h3, .bot-panel .panel-heading h4 {
+  display: inline;
+}
+
+/************************
 BOT Graphs
 *************************/
-/* line 118, ../../app/styles/growbot.scss */
+/* line 174, ../../app/styles/growbot.scss */
 .y2 .tick {
   opacity: 0 !important;
 }
 
+@media (max-width: 768px) {
+  /* line 179, ../../app/styles/growbot.scss */
+  .legendWrap {
+    display: none;
+  }
+
+  /* line 182, ../../app/styles/growbot.scss */
+  g.multiChart > g {
+    -webkit-transform: translate(40, 35);
+    transform: translate(40, 35);
+  }
+}
 /************************
 Navbar Stuff
 *************************/
-/* line 125, ../../app/styles/growbot.scss */
+/* line 190, ../../app/styles/growbot.scss */
 .navbar {
   background-color: #D4EE9F;
   color: #0C4700;
 }
 
-/* line 131, ../../app/styles/growbot.scss */
+/* line 196, ../../app/styles/growbot.scss */
 .my-well {
   background-color: #f5f5f5;
   border: 1px solid #e3e3e3;
@@ -8723,34 +8792,49 @@ Navbar Stuff
 }
 
 @media (max-width: 768px) {
-  /* line 140, ../../app/styles/growbot.scss */
+  /* line 205, ../../app/styles/growbot.scss */
   body {
     padding-top: 0;
+    width: 100%;
+    height: 100%;
   }
 
-  /* line 143, ../../app/styles/growbot.scss */
+  /* line 210, ../../app/styles/growbot.scss */
   .navbar-header:before, .navbar-header:after {
     display: none;
   }
 
-  /* line 147, ../../app/styles/growbot.scss */
+  /* line 214, ../../app/styles/growbot.scss */
   .container, .container-fluid {
     padding-left: 0;
     padding-right: 0;
   }
 
-  /* line 151, ../../app/styles/growbot.scss */
+  /* line 218, ../../app/styles/growbot.scss */
   .xs-center-text {
     text-align: center;
   }
 
-  /* line 154, ../../app/styles/growbot.scss */
+  /* line 221, ../../app/styles/growbot.scss */
   .right {
     float: none;
   }
 
-  /* line 157, ../../app/styles/growbot.scss */
+  /* line 224, ../../app/styles/growbot.scss */
   .xs-right {
     float: right;
   }
+}
+/* line 231, ../../app/styles/growbot.scss */
+.loading-modal .loading-icon {
+  font-size: 2em;
+}
+/* line 234, ../../app/styles/growbot.scss */
+.loading-modal .modal-content {
+  text-align: center;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  background-color: transparent;
+  color: #FFF;
 }

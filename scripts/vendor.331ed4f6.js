@@ -83857,3 +83857,537 @@ nv.models.stackedAreaChart = function() {
 }
 })();
 !function(){"use strict";angular.module("nvd3",[]).directive("nvd3",["utils",function(utils){return{restrict:"AE",scope:{data:"=",options:"=",api:"=?",events:"=?",config:"=?"},link:function(scope,element){function configure(chart,options,chartType){chart&&options&&angular.forEach(chart,function(value,key){"dispatch"===key?((void 0===options[key]||null===options[key])&&scope._config.extended&&(options[key]={}),configureEvents(value,options[key])):"xScale"===key&&"scatterChart"===chartType||"yScale"===key&&"scatterChart"===chartType||"values"===key&&"pieChart"===chartType||["scatter","defined","options","axis","rangeBand","rangeBands"].indexOf(key)<0&&(void 0===options[key]||null===options[key]?scope._config.extended&&(options[key]=value()):chart[key](options[key]))})}function configureEvents(dispatch,options){dispatch&&options&&angular.forEach(dispatch,function(value,key){void 0===options[key]||null===options[key]?scope._config.extended&&(options[key]=value.on):dispatch.on(key+"._",options[key])})}function configureWrapper(name){var _=utils.deepExtend(defaultWrapper(name),scope.options[name]||{});scope._config.extended&&(scope.options[name]=_);var wrapElement=angular.element("<div></div>").html(_.html||"").addClass(name).addClass(_.class).removeAttr("style").css(_.css);_.html||wrapElement.text(_.text),_.enable&&("title"===name?element.prepend(wrapElement):"subtitle"===name?element.find(".title").after(wrapElement):"caption"===name&&element.append(wrapElement))}function configureStyles(){var _=utils.deepExtend(defaultStyles(),scope.options.styles||{});scope._config.extended&&(scope.options.styles=_),angular.forEach(_.classes,function(value,key){value?element.addClass(key):element.removeClass(key)}),element.removeAttr("style").css(_.css)}function defaultWrapper(_){switch(_){case"title":return{enable:!1,text:"Write Your Title","class":"h4",css:{width:scope.options.chart.width+"px",textAlign:"center"}};case"subtitle":return{enable:!1,text:"Write Your Subtitle",css:{width:scope.options.chart.width+"px",textAlign:"center"}};case"caption":return{enable:!1,text:"Figure 1. Write Your Caption text.",css:{width:scope.options.chart.width+"px",textAlign:"center"}}}}function defaultStyles(){return{classes:{"with-3d-shadow":!0,"with-transitions":!0,gallery:!1},css:{}}}var defaultConfig={extended:!1,visible:!0,disabled:!1,autorefresh:!0,refreshDataOnly:!1,deepWatchData:!0,debounce:10};scope._config=angular.extend(defaultConfig,scope.config),scope.api={refresh:function(){scope.api.updateWithOptions(scope.options)},update:function(){scope.chart.update()},updateWithOptions:function(options){scope.api.clearElement(),angular.isDefined(options)!==!1&&scope._config.visible&&(scope.chart=nv.models[options.chart.type](),scope.chart.id=Math.random().toString(36).substr(2,15),angular.forEach(scope.chart,function(value,key){"options"===key||"id"===key||"resizeHandler"===key||("dispatch"===key?((void 0===options.chart[key]||null===options.chart[key])&&scope._config.extended&&(options.chart[key]={}),configureEvents(scope.chart[key],options.chart[key])):["lines","lines1","lines2","bars","bars1","bars2","stack1","stack2","multibar","discretebar","pie","scatter","bullet","sparkline","legend","distX","distY","xAxis","x2Axis","yAxis","yAxis1","yAxis2","y1Axis","y2Axis","y3Axis","y4Axis","interactiveLayer","controls"].indexOf(key)>=0?((void 0===options.chart[key]||null===options.chart[key])&&scope._config.extended&&(options.chart[key]={}),configure(scope.chart[key],options.chart[key],options.chart.type)):"clipEdge"===key&&"multiBarHorizontalChart"===options.chart.type||"clipVoronoi"===key&&"historicalBarChart"===options.chart.type||"color"===key&&"indentedTreeChart"===options.chart.type||"defined"===key&&("historicalBarChart"===options.chart.type||"cumulativeLineChart"===options.chart.type||"lineWithFisheyeChart"===options.chart.type)||"forceX"===key&&("multiBarChart"===options.chart.type||"discreteBarChart"===options.chart.type||"multiBarHorizontalChart"===options.chart.type)||"interpolate"===key&&"historicalBarChart"===options.chart.type||"isArea"===key&&"historicalBarChart"===options.chart.type||"size"===key&&"historicalBarChart"===options.chart.type||"stacked"===key&&"stackedAreaChart"===options.chart.type||"values"===key&&"pieChart"===options.chart.type||"xScale"===key&&"scatterChart"===options.chart.type||"yScale"===key&&"scatterChart"===options.chart.type||"x"===key&&("lineWithFocusChart"===options.chart.type||"multiChart"===options.chart.type)||"y"===key&&("lineWithFocusChart"===options.chart.type||"multiChart"===options.chart.type)||(void 0===options.chart[key]||null===options.chart[key]?scope._config.extended&&(options.chart[key]=value()):scope.chart[key](options.chart[key])))}),scope.api.updateWithData(scope.data),(options.title||scope._config.extended)&&configureWrapper("title"),(options.subtitle||scope._config.extended)&&configureWrapper("subtitle"),(options.caption||scope._config.extended)&&configureWrapper("caption"),(options.styles||scope._config.extended)&&configureStyles(),nv.addGraph(function(){return scope.chart.resizeHandler=utils.windowResize(function(){scope.chart.update()}),scope.chart},options.chart.callback))},updateWithData:function(data){data&&(scope.options.chart.transitionDuration=+scope.options.chart.transitionDuration||250,d3.select(element[0]).select("svg").remove(),d3.select(element[0]).append("svg").attr("height",scope.options.chart.height).attr("width",scope.options.chart.width).datum(data).transition().duration(scope.options.chart.transitionDuration).call(scope.chart),d3.select(element[0]).select("svg")[0][0].style.height=scope.options.chart.height+"px",d3.select(element[0]).select("svg")[0][0].style.width=scope.options.chart.width+"px","multiChart"===scope.options.chart.type&&scope.chart.update())},clearElement:function(){if(element.find(".title").remove(),element.find(".subtitle").remove(),element.find(".caption").remove(),element.empty(),scope.chart){scope.chart.resizeHandler&&scope.chart.resizeHandler.clear();for(var i=0;i<nv.graphs.length;i++)nv.graphs[i].id===scope.chart.id&&nv.graphs.splice(i,1)}scope.chart=null,nv.tooltip.cleanup()},getScope:function(){return scope}},scope.$watch("options",utils.debounce(function(){!scope._config.disabled&&scope._config.autorefresh&&scope.api.refresh()},scope._config.debounce,!0),!0),scope.$watch("data",function(newData,oldData){newData!==oldData&&scope.chart&&!scope._config.disabled&&scope._config.autorefresh&&(scope._config.refreshDataOnly?scope.chart.update():scope.api.refresh())},scope._config.deepWatchData),scope.$watch("config",function(newConfig,oldConfig){newConfig!==oldConfig&&(scope._config=angular.extend(defaultConfig,newConfig),scope.api.refresh())},!0),angular.forEach(scope.events,function(eventHandler,event){scope.$on(event,function(e){return eventHandler(e,scope)})}),element.on("$destroy",function(){scope.api.clearElement()})}}}]).factory("utils",function(){return{debounce:function(func,wait,immediate){var timeout;return function(){var context=this,args=arguments,later=function(){timeout=null,immediate||func.apply(context,args)},callNow=immediate&&!timeout;clearTimeout(timeout),timeout=setTimeout(later,wait),callNow&&func.apply(context,args)}},windowResize:function(handler){return window.addEventListener&&window.addEventListener("resize",handler),{callback:handler,clear:function(){window.removeEventListener("resize",handler)}}},deepExtend:function(dst){var me=this;return angular.forEach(arguments,function(obj){obj!==dst&&angular.forEach(obj,function(value,key){dst[key]&&dst[key].constructor&&dst[key].constructor===Object?me.deepExtend(dst[key],value):dst[key]=value})}),dst}}})}();
+// Generated by CoffeeScript 1.6.3
+/*
+jQuery Spin
+Copyright 2014 Kevin Sylvestre
+1.1.6
+*/
+
+
+(function() {
+  "use strict";
+  var $, Spinner;
+
+  $ = jQuery;
+
+  Spinner = (function() {
+    Spinner.prototype.defaults = {
+      petals: 9
+    };
+
+    function Spinner($element, options) {
+      this.$element = $element;
+      this.options = $.extend({}, this.defaults, options);
+      this.configure();
+    }
+
+    Spinner.prototype.show = function() {
+      return this.$element.animate({
+        opacity: 1.0
+      });
+    };
+
+    Spinner.prototype.hide = function() {
+      return this.$element.animate({
+        opacity: 0.0
+      });
+    };
+
+    Spinner.prototype.destroy = function() {
+      this.$element.empty();
+      return this.$element.data('spin', void 0);
+    };
+
+    Spinner.prototype.configure = function() {
+      var $petal, i, _i, _ref, _results;
+      this.$element.empty();
+      _results = [];
+      for (i = _i = 0, _ref = this.options.petals; 0 <= _ref ? _i < _ref : _i > _ref; i = 0 <= _ref ? ++_i : --_i) {
+        $petal = $("<div />");
+        _results.push(this.$element.append($petal));
+      }
+      return _results;
+    };
+
+    return Spinner;
+
+  })();
+
+  $.fn.spin = function(options) {
+    return $(this).each(function() {
+      var $this, spinner;
+      $this = $(this);
+      spinner = $this.data('spinner');
+      if (spinner == null) {
+        $this.data('spinner', spinner = new Spinner($this, options));
+      }
+      if (typeof options === 'string') {
+        return spinner[options]();
+      }
+    });
+  };
+
+  $(function() {
+    return $('[data-spin]').spin();
+  });
+
+}).call(this);
+
+/**
+ * Copyright (c) 2011-2014 Felix Gnass
+ * Licensed under the MIT license
+ */
+(function(root, factory) {
+
+  /* CommonJS */
+  if (typeof exports == 'object')  module.exports = factory()
+
+  /* AMD module */
+  else if (typeof define == 'function' && define.amd) define(factory)
+
+  /* Browser global */
+  else root.Spinner = factory()
+}
+(this, function() {
+  "use strict";
+
+  var prefixes = ['webkit', 'Moz', 'ms', 'O'] /* Vendor prefixes */
+    , animations = {} /* Animation rules keyed by their name */
+    , useCssAnimations /* Whether to use CSS animations or setTimeout */
+
+  /**
+   * Utility function to create elements. If no tag name is given,
+   * a DIV is created. Optionally properties can be passed.
+   */
+  function createEl(tag, prop) {
+    var el = document.createElement(tag || 'div')
+      , n
+
+    for(n in prop) el[n] = prop[n]
+    return el
+  }
+
+  /**
+   * Appends children and returns the parent.
+   */
+  function ins(parent /* child1, child2, ...*/) {
+    for (var i=1, n=arguments.length; i<n; i++)
+      parent.appendChild(arguments[i])
+
+    return parent
+  }
+
+  /**
+   * Insert a new stylesheet to hold the @keyframe or VML rules.
+   */
+  var sheet = (function() {
+    var el = createEl('style', {type : 'text/css'})
+    ins(document.getElementsByTagName('head')[0], el)
+    return el.sheet || el.styleSheet
+  }())
+
+  /**
+   * Creates an opacity keyframe animation rule and returns its name.
+   * Since most mobile Webkits have timing issues with animation-delay,
+   * we create separate rules for each line/segment.
+   */
+  function addAnimation(alpha, trail, i, lines) {
+    var name = ['opacity', trail, ~~(alpha*100), i, lines].join('-')
+      , start = 0.01 + i/lines * 100
+      , z = Math.max(1 - (1-alpha) / trail * (100-start), alpha)
+      , prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase()
+      , pre = prefix && '-' + prefix + '-' || ''
+
+    if (!animations[name]) {
+      sheet.insertRule(
+        '@' + pre + 'keyframes ' + name + '{' +
+        '0%{opacity:' + z + '}' +
+        start + '%{opacity:' + alpha + '}' +
+        (start+0.01) + '%{opacity:1}' +
+        (start+trail) % 100 + '%{opacity:' + alpha + '}' +
+        '100%{opacity:' + z + '}' +
+        '}', sheet.cssRules.length)
+
+      animations[name] = 1
+    }
+
+    return name
+  }
+
+  /**
+   * Tries various vendor prefixes and returns the first supported property.
+   */
+  function vendor(el, prop) {
+    var s = el.style
+      , pp
+      , i
+
+    prop = prop.charAt(0).toUpperCase() + prop.slice(1)
+    for(i=0; i<prefixes.length; i++) {
+      pp = prefixes[i]+prop
+      if(s[pp] !== undefined) return pp
+    }
+    if(s[prop] !== undefined) return prop
+  }
+
+  /**
+   * Sets multiple style properties at once.
+   */
+  function css(el, prop) {
+    for (var n in prop)
+      el.style[vendor(el, n)||n] = prop[n]
+
+    return el
+  }
+
+  /**
+   * Fills in default values.
+   */
+  function merge(obj) {
+    for (var i=1; i < arguments.length; i++) {
+      var def = arguments[i]
+      for (var n in def)
+        if (obj[n] === undefined) obj[n] = def[n]
+    }
+    return obj
+  }
+
+  /**
+   * Returns the line color from the given string or array.
+   */
+  function getColor(color, idx) {
+    return typeof color == 'string' ? color : color[idx % color.length]
+  }
+
+  // Built-in defaults
+
+  var defaults = {
+    lines: 12,            // The number of lines to draw
+    length: 7,            // The length of each line
+    width: 5,             // The line thickness
+    radius: 10,           // The radius of the inner circle
+    rotate: 0,            // Rotation offset
+    corners: 1,           // Roundness (0..1)
+    color: '#000',        // #rgb or #rrggbb
+    direction: 1,         // 1: clockwise, -1: counterclockwise
+    speed: 1,             // Rounds per second
+    trail: 100,           // Afterglow percentage
+    opacity: 1/4,         // Opacity of the lines
+    fps: 20,              // Frames per second when using setTimeout()
+    zIndex: 2e9,          // Use a high z-index by default
+    className: 'spinner', // CSS class to assign to the element
+    top: '50%',           // center vertically
+    left: '50%',          // center horizontally
+    position: 'absolute'  // element position
+  }
+
+  /** The constructor */
+  function Spinner(o) {
+    this.opts = merge(o || {}, Spinner.defaults, defaults)
+  }
+
+  // Global defaults that override the built-ins:
+  Spinner.defaults = {}
+
+  merge(Spinner.prototype, {
+
+    /**
+     * Adds the spinner to the given target element. If this instance is already
+     * spinning, it is automatically removed from its previous target b calling
+     * stop() internally.
+     */
+    spin: function(target) {
+      this.stop()
+
+      var self = this
+        , o = self.opts
+        , el = self.el = css(createEl(0, {className: o.className}), {position: o.position, width: 0, zIndex: o.zIndex})
+
+      css(el, {
+        left: o.left,
+        top: o.top
+      })
+        
+      if (target) {
+        target.insertBefore(el, target.firstChild||null)
+      }
+
+      el.setAttribute('role', 'progressbar')
+      self.lines(el, self.opts)
+
+      if (!useCssAnimations) {
+        // No CSS animation support, use setTimeout() instead
+        var i = 0
+          , start = (o.lines - 1) * (1 - o.direction) / 2
+          , alpha
+          , fps = o.fps
+          , f = fps/o.speed
+          , ostep = (1-o.opacity) / (f*o.trail / 100)
+          , astep = f/o.lines
+
+        ;(function anim() {
+          i++;
+          for (var j = 0; j < o.lines; j++) {
+            alpha = Math.max(1 - (i + (o.lines - j) * astep) % f * ostep, o.opacity)
+
+            self.opacity(el, j * o.direction + start, alpha, o)
+          }
+          self.timeout = self.el && setTimeout(anim, ~~(1000/fps))
+        })()
+      }
+      return self
+    },
+
+    /**
+     * Stops and removes the Spinner.
+     */
+    stop: function() {
+      var el = this.el
+      if (el) {
+        clearTimeout(this.timeout)
+        if (el.parentNode) el.parentNode.removeChild(el)
+        this.el = undefined
+      }
+      return this
+    },
+
+    /**
+     * Internal method that draws the individual lines. Will be overwritten
+     * in VML fallback mode below.
+     */
+    lines: function(el, o) {
+      var i = 0
+        , start = (o.lines - 1) * (1 - o.direction) / 2
+        , seg
+
+      function fill(color, shadow) {
+        return css(createEl(), {
+          position: 'absolute',
+          width: (o.length+o.width) + 'px',
+          height: o.width + 'px',
+          background: color,
+          boxShadow: shadow,
+          transformOrigin: 'left',
+          transform: 'rotate(' + ~~(360/o.lines*i+o.rotate) + 'deg) translate(' + o.radius+'px' +',0)',
+          borderRadius: (o.corners * o.width>>1) + 'px'
+        })
+      }
+
+      for (; i < o.lines; i++) {
+        seg = css(createEl(), {
+          position: 'absolute',
+          top: 1+~(o.width/2) + 'px',
+          transform: o.hwaccel ? 'translate3d(0,0,0)' : '',
+          opacity: o.opacity,
+          animation: useCssAnimations && addAnimation(o.opacity, o.trail, start + i * o.direction, o.lines) + ' ' + 1/o.speed + 's linear infinite'
+        })
+
+        if (o.shadow) ins(seg, css(fill('#000', '0 0 4px ' + '#000'), {top: 2+'px'}))
+        ins(el, ins(seg, fill(getColor(o.color, i), '0 0 1px rgba(0,0,0,.1)')))
+      }
+      return el
+    },
+
+    /**
+     * Internal method that adjusts the opacity of a single line.
+     * Will be overwritten in VML fallback mode below.
+     */
+    opacity: function(el, i, val) {
+      if (i < el.childNodes.length) el.childNodes[i].style.opacity = val
+    }
+
+  })
+
+
+  function initVML() {
+
+    /* Utility function to create a VML tag */
+    function vml(tag, attr) {
+      return createEl('<' + tag + ' xmlns="urn:schemas-microsoft.com:vml" class="spin-vml">', attr)
+    }
+
+    // No CSS transforms but VML support, add a CSS rule for VML elements:
+    sheet.addRule('.spin-vml', 'behavior:url(#default#VML)')
+
+    Spinner.prototype.lines = function(el, o) {
+      var r = o.length+o.width
+        , s = 2*r
+
+      function grp() {
+        return css(
+          vml('group', {
+            coordsize: s + ' ' + s,
+            coordorigin: -r + ' ' + -r
+          }),
+          { width: s, height: s }
+        )
+      }
+
+      var margin = -(o.width+o.length)*2 + 'px'
+        , g = css(grp(), {position: 'absolute', top: margin, left: margin})
+        , i
+
+      function seg(i, dx, filter) {
+        ins(g,
+          ins(css(grp(), {rotation: 360 / o.lines * i + 'deg', left: ~~dx}),
+            ins(css(vml('roundrect', {arcsize: o.corners}), {
+                width: r,
+                height: o.width,
+                left: o.radius,
+                top: -o.width>>1,
+                filter: filter
+              }),
+              vml('fill', {color: getColor(o.color, i), opacity: o.opacity}),
+              vml('stroke', {opacity: 0}) // transparent stroke to fix color bleeding upon opacity change
+            )
+          )
+        )
+      }
+
+      if (o.shadow)
+        for (i = 1; i <= o.lines; i++)
+          seg(i, -2, 'progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)')
+
+      for (i = 1; i <= o.lines; i++) seg(i)
+      return ins(el, g)
+    }
+
+    Spinner.prototype.opacity = function(el, i, val, o) {
+      var c = el.firstChild
+      o = o.shadow && o.lines || 0
+      if (c && i+o < c.childNodes.length) {
+        c = c.childNodes[i+o]; c = c && c.firstChild; c = c && c.firstChild
+        if (c) c.opacity = val
+      }
+    }
+  }
+
+  var probe = css(createEl('group'), {behavior: 'url(#default#VML)'})
+
+  if (!vendor(probe, 'transform') && probe.adj) initVML()
+  else useCssAnimations = vendor(probe, 'animation')
+
+  return Spinner
+
+}));
+
+/**
+ * angular-spinner version 0.6.1
+ * License: MIT.
+ * Copyright (C) 2013, 2014, Uri Shaked and contributors.
+ */
+
+(function (root) {
+	'use strict';
+
+	function factory(angular, Spinner) {
+
+		return angular
+			.module('angularSpinner', [])
+
+			.provider('usSpinnerConfig', function () {
+				var _config = {};
+
+				return {
+					setDefaults: function (config) {
+						_config = config || _config;
+					},
+					$get: function () {
+						return {
+							config: _config
+						};
+					}
+				};
+			})
+
+			.factory('usSpinnerService', ['$rootScope', function ($rootScope) {
+				var config = {};
+
+				config.spin = function (key) {
+					$rootScope.$broadcast('us-spinner:spin', key);
+				};
+
+				config.stop = function (key) {
+					$rootScope.$broadcast('us-spinner:stop', key);
+				};
+
+				return config;
+			}])
+
+			.directive('usSpinner', ['$window', 'usSpinnerConfig', function ($window, usSpinnerConfig) {
+				return {
+					scope: true,
+					link: function (scope, element, attr) {
+						var SpinnerConstructor = Spinner || $window.Spinner;
+
+						scope.spinner = null;
+
+						scope.key = angular.isDefined(attr.spinnerKey) ? attr.spinnerKey : false;
+
+						scope.startActive = angular.isDefined(attr.spinnerStartActive) ?
+							scope.$eval(attr.spinnerStartActive) : scope.key ?
+							false : true;
+
+						function stopSpinner() {
+							if (scope.spinner) {
+								scope.spinner.stop();
+							}
+						}
+
+						scope.spin = function () {
+							if (scope.spinner) {
+								scope.spinner.spin(element[0]);
+							}
+						};
+
+						scope.stop = function () {
+							scope.startActive = false;
+							stopSpinner();
+						};
+
+						scope.$watch(attr.usSpinner, function (options) {
+							stopSpinner();
+
+							options = options || {};
+							for (var property in usSpinnerConfig.config) {
+							    if (options[property] === undefined) {
+							        options[property] = usSpinnerConfig.config[property];
+							    }
+							}
+
+							scope.spinner = new SpinnerConstructor(options);
+							if (!scope.key || scope.startActive) {
+								scope.spinner.spin(element[0]);
+							}
+						}, true);
+
+						scope.$on('us-spinner:spin', function (event, key) {
+							if (key === scope.key) {
+								scope.spin();
+							}
+						});
+
+						scope.$on('us-spinner:stop', function (event, key) {
+							if (key === scope.key) {
+								scope.stop();
+							}
+						});
+
+						scope.$on('$destroy', function () {
+							scope.stop();
+							scope.spinner = null;
+						});
+					}
+				};
+			}]);
+	}
+
+	if (typeof define === 'function' && define.amd) {
+		/* AMD module */
+		define(['angular', 'spin'], factory);
+	} else {
+		/* Browser global */
+		factory(root.angular);
+	}
+}(window));

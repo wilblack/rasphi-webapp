@@ -8,6 +8,17 @@
  *
  * Main module of the application.
  */
+
+window.isAuthenticated = function($location, $localStorage){
+  var ref = new Firebase("https://rasphi.firebaseio.com");
+  var authData = ref.getAuth();
+  if (authData){
+    return true;
+  } else {
+    $location.path("login")
+  }
+}
+
 angular
   .module('rasphiWebappApp', [
     'ngAnimate',
@@ -23,6 +34,8 @@ angular
     'nvd3',
     'firebase',
     'firebase.services',
+    'angularSpinner'
+
 
   ])
 
@@ -43,7 +56,15 @@ angular
     $routeProvider
       .when('/', {
         templateUrl: 'views/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        resolve: {
+            authenticated: isAuthenticated
+
+        }
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -73,7 +94,7 @@ angular
   });
 
 var app = angular.module("rasphiWebappApp");
-app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user) {
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user, $modal, usSpinnerService) {
     $scope.page = 'home';
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
@@ -86,6 +107,17 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
     $scope.carouselIndex = 1;
+
+    $scope.loadingModal = $modal({
+        template: 'views/partials/loading-modal.html',
+        container: "body",
+        backdrop: false,
+        placement: 'center',
+        keyboard: false,
+        show: false
+    });
+
+    usSpinnerService.spin('spinner-1');
 
     $scope.captureImage = function(){
         $images.captureImage();
@@ -131,10 +163,13 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
                 data: $scope.current
             };
             $sensorValues.updateGraphs(entity);
-            
         });
-        
     });
+
+    $rootScope.$on('sensorvalues-updated', function(){
+        $scope.loadingModal.hide();
+        usSpinnerService.stop('spinner-1');
+    })
 
     $images.fetchList()
     .then(function(data, status){
@@ -250,6 +285,39 @@ app.controller("JournalCtrl", function($rootScope, $scope, $journal, ardyhConf, 
         });
     };
 
+});
+angular.module('rasphiWebappApp')
+.controller('LoginCtrl', function($scope, ardyhConf, $localStorage, $location) {
+    $scope.page = 'login';
+
+    $scope.loginData = {
+        email: '',
+        password: '',
+        stayLoggedIn: false,
+    };
+
+    $scope.authenticate = function(){
+        var ref = new Firebase("https://"+ardyhConf.firebaseName+".firebaseio.com");
+        $scope.errorMsg = "";
+        ref.authWithPassword({
+          email    : $scope.loginData.email,
+          password : $scope.loginData.password
+        }, function(error, authData) {
+          if (error) {
+            console.log("Login Failed!", error);
+            $scope.errorMsg = "Login Failed.";
+            $scope.loginData = {
+                email: '',
+                password: '',
+                stayLoggedIn: false
+            };
+          } else {
+            console.log("Authenticated successfully with payload:", authData);
+            $localStorage.setObject('user', authData);
+            $location.path("journal");
+          }
+        });
+    }
 });
 'use strict';
 
@@ -752,7 +820,7 @@ service.service( '$firebaseApi', ['$rootScope',
 'user strict';
 
 angular.module('rasphiWebappApp')
-.directive('botGraphs', function($sensorValues){
+.directive('botGraphs', function($sensorValues, $rootScope){
     return{
         scope:true,
         templateUrl: 'views/partials/bot-graphs.html',
@@ -800,9 +868,9 @@ angular.module('rasphiWebappApp')
                     height: 350,
                     margin : {
                         top: 30,
-                        right: 60,
+                        right: 40,
                         bottom: 50,
-                        left: 70
+                        left: 40
                     },
                     color: d3.scale.category10().range(),
                     //useInteractiveGuideline: true,
@@ -888,6 +956,7 @@ angular.module('rasphiWebappApp')
                     _.each($sensorValues.graphs.light[0].values, function(val){
                         if (val[1] !== null) scope.multiChart[2].values.push({x:val[0], y:val[1]});
                     })
+                    $rootScope.$broadcast('sensorvalues-updated');
                     // scope.MultiGraphs[2].value = scope.graphs.light.values;
                 },function(data, status) {
                     console.log("failed to fetch sensorValues");
