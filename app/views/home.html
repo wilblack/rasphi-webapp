@@ -4,30 +4,32 @@
 <div class="col col-sm-8 col-sm-offset-2">
     <div class="row">
         <div class="col col-sm-12">
+            <span us-spinner="{radius:30, width:8, length: 16}" spinner-key="spinner-1"></span>
             <div class="panel panel-default bot-panel">
                 <div class="panel-heading">
-                    {{current.botName}}
-                </div>
-                <div class="panel-body">
-                    <div>
-                        temp <span change-direction previous="previous.temp" current="current.temp"></span><span class="large-stat" ng-show="units.temp === 'c'">{{current.temp | number: 1}} &deg;C</span>
+                     <h3>{{current.botName}} - </h3> 
+
+                        <span class="hidden-xs">temp </span><span class="large-stat" ng-show="units.temp === 'c'">{{current.temp | number: 1}} &deg;C</span>
                         <span class="large-stat" ng-show="units.temp === 'f'">{{celsius2fahrenheit(current.temp) | number: 1}}&degF</span>
                         
                         
-
-                        
-                        &nbsp;&nbsp;humid <span change-direction previous="previous.humidity" current="current.humidity"></span><span class="item item-text-wrap large-stat">
+                        &nbsp;&nbsp;<span class="hidden-xs">humid </span><span class="item item-text-wrap large-stat">
                             {{current.humidity | number: 1}}% 
                         </span>
                         
-                        &nbsp;&nbsp;light <span change-direction previous="previous.light" current="current.light"></span><span class="item item-text-wrap large-stat">
+                        &nbsp;&nbsp;<span class="hidden-xs">light </span><span class="item item-text-wrap large-stat">
                             {{current.light | number: 0}} </span>
                         </span>
-                        
-                    </div>
+                        <div>
+                            <small>Last updated {{current.timestamp}}</small>
+                        </div>
 
-                    <div>
-                        Last updated {{current.timestamp}}
+                </div>
+
+                <div class="panel-body">
+                    
+
+                    <div ng-if="false">
                         <button class="btn btn-default btn-small" ng-click='refreshSensorValues()'><span class="glyphicon glyphicon-refresh"></span></button>
                                                 
                         <button class="btn btn-default btn-small" ng-click='captureImage()'><span class="glyphicon glyphicon-camera"></span></button>
@@ -39,7 +41,6 @@
                             rn-carousel class="image" 
                             rn-carousel-controls 
                             rn-carousel-index="carouselIndex"
-
                         >
                           <li ng-repeat="image in images">
                             {{image}}

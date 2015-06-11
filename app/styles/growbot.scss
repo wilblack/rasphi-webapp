@@ -41,15 +41,6 @@ $tertiary-dark: #354F00;
     color: $tertiary;
 }
 
-.bot-panel {
-
-    .panel-heading {
-        background-color: $tertiary-light;
-    }
-
-    .panel-body {
-    }
-}
 
 .change-directions {
     display:inline-block;
@@ -112,11 +103,85 @@ span.journal-type {
 
 
 /************************
+Splash Screen
+*************************/
+
+[ng-cloak].splash-screen {
+    position: fixed;
+    top:0;
+    left:0;
+    display: block !important;
+    width:100%;
+    height:100%;
+    background-color: $tertiary-dark;
+
+    h3 {
+        height:100%;
+    }
+}
+
+.splash-screen {
+    display: none;
+}
+
+/*******************************
+Bot Panels
+*********************************/
+
+.large-stat {
+    font-size: 2em;
+    color: $tertiary-dark;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+
+    button {
+        flex-grow:1;
+    }
+    button:first-child {
+        margin-right: 3px;
+    }
+    button:last-child {
+        margin-left: 3px;
+    }
+
+}
+
+.bot-panel {
+
+    .panel-heading {
+        background-color: $primary-light;
+        h1, h2, h3, h4 {
+            display: inline;
+        }
+    }
+
+    .panel-body {
+    }
+}
+
+
+
+
+
+
+/************************
 BOT Graphs
 *************************/
 
 .y2 .tick {
     opacity: 0 !important;
+}
+
+@media (max-width: 768px) {
+    .legendWrap {
+        display:none;
+    }
+    g.multiChart > g {
+        transform: translate(40, 35);
+    }
 }
 
 /************************
@@ -139,6 +204,8 @@ Navbar Stuff
 @media (max-width: 768px) {
     body {
         padding-top:0;
+        width:100%;
+        height:100%;
     }
     .navbar-header:before, .navbar-header:after {
         display:none;
@@ -156,5 +223,20 @@ Navbar Stuff
     }
     .xs-right {
         float:right;
+    }
+}
+
+
+.loading-modal {
+    .loading-icon {
+        font-size: 2em;
+    }
+    .modal-content {
+        text-align: center;
+        border:none;
+        box-shadow: none;
+        border-radius: 0;
+        background-color:transparent;
+        color:#FFF;
     }
 }

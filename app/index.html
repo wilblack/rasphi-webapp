@@ -10,6 +10,7 @@
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/angular-carousel/dist/angular-carousel.css" />
     <link rel="stylesheet" href="bower_components/nvd3/src/nv.d3.css" />
+    <link rel="stylesheet" href="bower_components/spin/stylesheets/jquery.spin.css" />
     <!-- endbower -->
     <link rel="stylesheet" href="styles/vendor/nv.d3.min.css">
     <!-- endbuild -->
@@ -21,12 +22,15 @@
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
+    <div class="splash-screen" ng-cloak="">
+        <h3>Hang on, I'm loading data.</h3>
+    </div>
     <!-- Add your site or application content here -->
     <div class="container-fluid">
       
       <div ng-view="">
-        <h3>Hang on, I'm loading data.</h3>
+
+        
       </div>
 
  
@@ -73,6 +77,9 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/nvd3/nv.d3.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.min.js"></script>
+    <script src="bower_components/spin/javascripts/jquery.spin.js"></script>
+    <script src="bower_components/spin.js/spin.js"></script>
+    <script src="bower_components/angular-spinner/angular-spinner.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -82,6 +89,7 @@
         <script src="scripts/controllers/SettingsCtrl.js"></script>
         <script src="scripts/controllers/LogFormCtrl.js"></script>
         <script src="scripts/controllers/JournalCtrl.js"></script>
+        <script src="scripts/controllers/LoginCtrl.js"></script>
 
         <script src="scripts/services/ardyh-services.js"></script>
         <script src="scripts/services/growbot-services.js"></script>

@@ -1,7 +1,7 @@
 'user strict';
 
 angular.module('rasphiWebappApp')
-.directive('botGraphs', function($sensorValues){
+.directive('botGraphs', function($sensorValues, $rootScope){
     return{
         scope:true,
         templateUrl: 'views/partials/bot-graphs.html',
@@ -49,9 +49,9 @@ angular.module('rasphiWebappApp')
                     height: 350,
                     margin : {
                         top: 30,
-                        right: 60,
+                        right: 40,
                         bottom: 50,
-                        left: 70
+                        left: 40
                     },
                     color: d3.scale.category10().range(),
                     //useInteractiveGuideline: true,
@@ -137,6 +137,7 @@ angular.module('rasphiWebappApp')
                     _.each($sensorValues.graphs.light[0].values, function(val){
                         if (val[1] !== null) scope.multiChart[2].values.push({x:val[0], y:val[1]});
                     })
+                    $rootScope.$broadcast('sensorvalues-updated');
                     // scope.MultiGraphs[2].value = scope.graphs.light.values;
                 },function(data, status) {
                     console.log("failed to fetch sensorValues");

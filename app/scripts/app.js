@@ -8,6 +8,17 @@
  *
  * Main module of the application.
  */
+
+window.isAuthenticated = function($location, $localStorage){
+  var ref = new Firebase("https://rasphi.firebaseio.com");
+  var authData = ref.getAuth();
+  if (authData){
+    return true;
+  } else {
+    $location.path("login")
+  }
+}
+
 angular
   .module('rasphiWebappApp', [
     'ngAnimate',
@@ -23,6 +34,8 @@ angular
     'nvd3',
     'firebase',
     'firebase.services',
+    'angularSpinner'
+
 
   ])
 
@@ -43,7 +56,15 @@ angular
     $routeProvider
       .when('/', {
         templateUrl: 'views/home.html',
-        controller: 'HomeCtrl'
+        controller: 'HomeCtrl',
+        resolve: {
+            authenticated: isAuthenticated
+
+        }
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl'
       })
       .when('/about', {
         templateUrl: 'views/about.html',

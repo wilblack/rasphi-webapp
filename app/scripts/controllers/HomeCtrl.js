@@ -1,5 +1,5 @@
 var app = angular.module("rasphiWebappApp");
-app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user) {
+app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $images, ardyhConf, $localStorage, $user, $modal, usSpinnerService) {
     $scope.page = 'home';
     $scope.ardyhConf = ardyhConf;
     $scope.current = {'botName':'rpi2'};
@@ -12,6 +12,17 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
     $scope.current.humidity = "--";
     $scope.current.pressure = "--";
     $scope.carouselIndex = 1;
+
+    $scope.loadingModal = $modal({
+        template: 'views/partials/loading-modal.html',
+        container: "body",
+        backdrop: false,
+        placement: 'center',
+        keyboard: false,
+        show: false
+    });
+
+    usSpinnerService.spin('spinner-1');
 
     $scope.captureImage = function(){
         $images.captureImage();
@@ -57,10 +68,13 @@ app.controller("HomeCtrl", function($rootScope, $scope, $ardyh, $sensorValues, $
                 data: $scope.current
             };
             $sensorValues.updateGraphs(entity);
-            
         });
-        
     });
+
+    $rootScope.$on('sensorvalues-updated', function(){
+        $scope.loadingModal.hide();
+        usSpinnerService.stop('spinner-1');
+    })
 
     $images.fetchList()
     .then(function(data, status){
